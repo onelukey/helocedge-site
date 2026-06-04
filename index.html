@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELOC Calculator & Guide - Get Your Financial Edge | HELOC Edge</title>
+    <meta name="description" content="Calculate your monthly payments, understand draw vs. repayment periods, and get the ultimate financial edge with our free interactive HELOC calculator.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>HELOC Edge</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="blog.html">Blog</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <div class="ad-slot">
+            <p>■ Advertisement Placeholder (AdSense Top Banner) ■</p>
+        </div>
+
+        <section style="margin-bottom: 40px; text-align: center;">
+            <h2 style="font-size: 2.5rem; color: #0f2c59; margin-bottom: 15px;">Calculate Your Home Equity Potential</h2>
+            <p style="font-size: 1.2rem; color: #555; max-width: 800px; margin: 0 auto;">
+                A Home Equity Line of Credit (HELOC) lets you borrow against the value of your home. Use our interactive tool below to estimate your payments during both the interest-only draw period and the full repayment period.
+            </p>
+        </section>
+
+        <main class="calc-container">
+            
+            <div class="calc-inputs">
+                <h3 style="color: #0f2c59; margin-bottom: 20px;">HELOC Calculator Inputs</h3>
+                
+                <div class="input-group">
+                    <label for="loanAmount">Estimated HELOC Balance ($)</label>
+                    <input type="number" id="loanAmount" value="50000" min="1000" step="1000">
+                </div>
+
+                <div class="input-group">
+                    <label for="interestRate">Annual Interest Rate (APR %)</label>
+                    <input type="number" id="interestRate" value="7.5" min="0.1" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label for="drawTerm">Draw Period Length (Years)</label>
+                    <input type="number" id="drawTerm" value="10" min="1" max="15">
+                </div>
+
+                <div class="input-group">
+                    <label for="repayTerm">Repayment Period Length (Years)</label>
+                    <input type="number" id="repayTerm" value="20" min="1" max="30">
+                </div>
+            </div>
+
+            <div class="results-box">
+                <h3>Estimated Payments</h3>
+                
+                <div class="result-item">
+                    Draw Period Payment <small>(Interest-Only)</small>:
+                    <span id="drawPayment">$0.00</span>
+                </div>
+                
+                <div class="result-item">
+                    Repayment Period Payment <small>(Principal + Interest)</small>:
+                    <span id="repayPayment">$0.00</span>
+                </div>
+                
+                <p style="font-size: 0.85rem; color: #a1c4fd; margin-top: 15px; line-height: 1.4;">
+                    *Calculations are estimates. Actual HELOCs often feature variable interest rates that can change over time.
+                </p>
+            </div>
+
+        </main>
+
+        <div class="ad-slot">
+            <p>■ Advertisement Placeholder (AdSense In-Article Box) ■</p>
+        </div>
+
+        <section style="margin-top: 50px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h3 style="color: #0f2c59; margin-bottom: 15px; font-size: 1.8rem;">How Does a HELOC Work?</h3>
+            <p style="margin-bottom: 15px;">
+                A HELOC functions like a revolving credit card backed by the equity in your home. Unlike a standard home equity loan, you don't receive a lump sum all at once. Instead, you are approved for a specific credit limit and can draw funds as needed during the **Draw Period**.
+            </p>
+            <h4 style="color: #0f2c59; margin: 20px 0 10px 0;">The Two Critical Phases of a HELOC</h4>
+            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                <li style="margin-bottom: 8px;"><strong>The Draw Period:</strong> Usually lasting 10 years, you can withdraw money whenever you like. Most lenders only require you to make <em>interest-only payments</em> during this time, keeping your monthly expenses exceptionally low.</li>
+                <li style="margin-bottom: 8px;"><strong>The Repayment Period:</strong> Typically lasting 15 to 20 years, your line of credit is locked—meaning you can no longer withdraw money. You must now pay back both the principal amount borrowed and the interest, which will cause your monthly payments to rise significantly.</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 HELOC Edge. All rights reserved. Financial information provided for educational purposes only.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
