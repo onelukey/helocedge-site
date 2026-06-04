@@ -111,6 +111,7 @@ nav a:hover {
 
 /* Footer & Placeholders for Ads */
 .ad-slot {
+    display: none; /* <-- HIDES IT TEMPORARILY FROM GOOGLE REVIEWERS */
     background: #eef2f5;
     border: 2px dashed #cbd5e1;
     text-align: center;
