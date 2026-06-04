@@ -1,0 +1,6 @@
+# Welcome to HELOC Edge. Hello Googlebot and friends!
+User-agent: *
+Allow: /
+
+# Link directly to your XML map so search engines find it instantly
+Sitemap: https://helocedge.com/sitemap.xml
