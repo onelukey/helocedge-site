@@ -37,6 +37,16 @@ nav a:hover {
     color: #40f8d4;
 }
 
+nav a:hover {
+    color: #40f8d4;
+}
+
+header nav a.active {
+    border-bottom: 2px solid #40f8d4;
+    color: #40f8d4;
+    padding-bottom: 4px; /* Optional: adds a tiny bit of breathing room above the underline */
+}
+
 /* Container */
 .container {
     max-width: 1100px;
@@ -111,7 +121,7 @@ nav a:hover {
 
 /* Footer & Placeholders for Ads */
 .ad-slot {
-    display: none; /* <-- HIDES IT TEMPORARILY FROM GOOGLE REVIEWERS */
+    display:none; /* <-- HIDES IT TEMPORARILY FROM GOOGLE REVIEWERS */
     background: #eef2f5;
     border: 2px dashed #cbd5e1;
     text-align: center;
