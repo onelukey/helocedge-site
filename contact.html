@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | HELOC Edge</title>
+    <meta name="description" content="Have questions about home equity lines of credit or our calculator? Get in touch with the editorial and research team at HELOC Edge.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <h1>HELOC Edge</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="blog/index.html">Blog</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="contact.html" class="active">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container" style="max-width: 800px; padding-bottom: 60px;">
+        
+        <div style="text-align: center; margin-top: 40px; margin-bottom: 40px;">
+            <h2 style="color: #0f2c59; font-size: 2.5rem; margin-bottom: 10px;">Contact Our Team</h2>
+            <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Have feedback on our calculator, a question about our editorial guides, or a media inquiry? We would love to hear from you.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 30px; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            
+            <!-- Information Block -->
+            <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 30px;">
+                <h3 style="color: #0f2c59; margin-bottom: 15px; font-size: 1.3rem;">Direct Inquiries</h3>
+                <p style="line-height: 1.6; color: #475569; margin-bottom: 15px;">
+                    For the fastest response, you can reach our editorial and management teams directly via email. We read every message and aim to reply within 48 business hours.
+                </p>
+                <p style="font-size: 1.1rem; font-weight: bold; color: #0f2c59;">
+                    Email: <a href="mailto:contact@helocedge.com" style="color: #0f2c59; text-decoration: underline; border-bottom: 2px solid #40f8d4;">contact@helocedge.com</a>
+                </p>
+            </div>
+
+            <!-- Contact Form Block -->
+            <div>
+                <h3 style="color: #0f2c59; margin-bottom: 20px; font-size: 1.3rem;">Send Us a Message</h3>
+                
+                <!-- NOTE: To make this form fully functional later, you can swap the action URL with a free service like Formspree or Web3Forms -->
+                <form action="https://formspree.io/f/YOUR_ENDPOINT_HERE" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #0f2c59; margin-bottom: 8px;" for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #0f2c59; margin-bottom: 8px;" for="email">Email Address</label>
+                        <input type="email" id="email" name="_replyto" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 600; color: #0f2c59; margin-bottom: 8px;" for="message">How can we help you?</label>
+                        <textarea id="message" name="message" rows="6" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; font-family: inherit; box-sizing: border-box; resize: vertical;"></textarea>
+                    </div>
+
+                    <button type="submit" style="background: #0f2c59; color: white; border: none; padding: 14px 28px; font-size: 1rem; font-weight: bold; border-radius: 6px; cursor: pointer; align-self: flex-start; transition: background 0.2s;">
+                        Send Message
+                    </button>
+                    
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 HELOC Edge. All rights reserved. <a href="privacy.html" style="color: #666; margin-left: 10px;">Privacy Policy</a> | <a href="disclaimer.html" style="color: #666; margin-left: 10px;">Disclaimer</a> | <a href="contact.html" style="color: #666; margin-left: 10px;">Contact Us</a></p>
+    </footer>
+
+</body>
+</html>
