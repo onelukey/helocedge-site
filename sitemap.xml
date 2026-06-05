@@ -55,4 +55,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
   </url>
+
+  <!-- Contact Us Page -->
+  <url>
+    <loc>https://helocedge.com/contact.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
 </urlset>
