@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HELOC vs. Home Equity Loan Calculator — Compare Side by Side | HELOCEdge.com</title>
+  <meta name="description" content="Compare a HELOC against a fixed-rate home equity loan side by side. See estimated monthly payments and total interest for both options based on your numbers." />
+  <link rel="canonical" href="https://www.helocedge.com/calculators/heloc-vs-home-equity-loan/" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9RLKEB7GMX');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+      .compare-summary { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-scale"></i> Compare</div>
+    <h1>HELOC vs. Home Equity Loan</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 3 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>Compare Your Options Side by Side</h2>
+      <p class="calc-widget-sub">Enter the amount you want to borrow and we'll compare a variable-rate HELOC against a fixed-rate home equity loan.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="loanAmount">Amount You Want to Borrow</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="loanAmount" class="with-prefix" value="50000" min="0" step="1000" />
+          </div>
+          <span class="field-hint">Lump sum or planned total draw</span>
+        </div>
+
+        <div class="field">
+          <label for="repayTerm">Repayment Term</label>
+          <div class="field-input-wrap">
+            <input type="number" id="repayTerm" class="with-suffix" value="15" min="1" max="30" step="1" />
+            <span class="field-suffix">yrs</span>
+          </div>
+          <span class="field-hint">Term to fully repay either option</span>
+        </div>
+
+        <div class="field">
+          <label for="helocRate">HELOC Rate (Variable) <i class="ti ti-info-circle" title="Typically lower starting rate but can change"></i></label>
+          <div class="field-input-wrap">
+            <input type="number" id="helocRate" class="with-suffix" value="8.5" min="0" step="0.1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Current average variable rate</span>
+        </div>
+
+        <div class="field">
+          <label for="helRate">Home Equity Loan Rate (Fixed) <i class="ti ti-info-circle" title="Usually slightly higher but locked for the full term"></i></label>
+          <div class="field-input-wrap">
+            <input type="number" id="helRate" class="with-suffix" value="8.9" min="0" step="0.1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Current average fixed rate</span>
+        </div>
+      </div>
+
+      <div class="rate-explainer">
+        <i class="ti ti-info-circle"></i>
+        <span>This comparison assumes the full HELOC amount is drawn immediately and repaid like a standard loan. In practice, HELOCs are usually drawn gradually — use the <a href="/calculators/heloc-payment-calculator/">HELOC Payment Calculator</a> for a draw + repayment breakdown.</span>
+      </div>
+
+      <button class="calc-btn" onclick="compareLoans()">
+        <i class="ti ti-calculator"></i> Compare My Options
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="results-summary compare-summary" style="grid-template-columns: 1fr 1fr;">
+          <div class="result-box">
+            <div class="result-box-label">HELOC Monthly Payment</div>
+            <div class="result-box-value" id="helocPayment">$0</div>
+            <div class="result-box-sub">Variable rate, may change</div>
+          </div>
+          <div class="result-box gold">
+            <div class="result-box-label">Home Equity Loan Payment</div>
+            <div class="result-box-value" id="helPayment">$0</div>
+            <div class="result-box-sub">Fixed for full term</div>
+          </div>
+        </div>
+
+        <div class="results-table-wrap">
+          <h3>Full Comparison</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>HELOC</th>
+                  <th>Home Equity Loan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Monthly Payment</td>
+                  <td id="tblHelocPayment">$0</td>
+                  <td id="tblHelPayment">$0</td>
+                </tr>
+                <tr>
+                  <td>Interest Rate Type</td>
+                  <td>Variable</td>
+                  <td>Fixed</td>
+                </tr>
+                <tr>
+                  <td>Total Interest Paid</td>
+                  <td id="tblHelocInterest">$0</td>
+                  <td id="tblHelInterest">$0</td>
+                </tr>
+                <tr style="font-weight:600;">
+                  <td>Total Repaid</td>
+                  <td id="tblHelocTotal">$0</td>
+                  <td id="tblHelTotal">$0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">Compare your two results above. Remember the HELOC rate is variable — your actual payment could rise or fall over time, while the home equity loan payment stays fixed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>HELOC vs. Home Equity Loan: The Core Difference</h2>
+      <p>Both let you borrow against your home's equity, but they work very differently. A <strong>HELOC</strong> is a revolving credit line with a variable rate — you draw what you need, when you need it, similar to a credit card. A <strong>home equity loan</strong> gives you a single lump sum upfront at a fixed rate, repaid in equal installments like a traditional mortgage.</p>
+
+      <h3>When a HELOC Makes More Sense</h3>
+      <p>HELOCs suit situations where your borrowing need is ongoing or uncertain — home renovations completed in stages, covering unpredictable expenses, or having a flexible safety net available. Because you only pay interest on what you draw, a HELOC can be cheaper if you don't need the full amount immediately.</p>
+
+      <h3>When a Home Equity Loan Makes More Sense</h3>
+      <p>A home equity loan suits one-time, known expenses — debt consolidation, a single large purchase, or a renovation with a fixed budget. Because the rate is fixed, your payment never changes, which makes budgeting simpler and protects you from rising rates.</p>
+
+      <div class="table-wrap" style="margin: 1.5rem 0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>HELOC</th>
+              <th>Home Equity Loan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>How funds are received</td>
+              <td>Revolving credit line</td>
+              <td>Lump sum upfront</td>
+            </tr>
+            <tr>
+              <td>Interest rate</td>
+              <td class="td-warn">Variable</td>
+              <td class="td-good">Fixed</td>
+            </tr>
+            <tr>
+              <td>Payment predictability</td>
+              <td class="td-warn">Can change over time</td>
+              <td class="td-good">Same every month</td>
+            </tr>
+            <tr>
+              <td>Best for</td>
+              <td>Ongoing or staged expenses</td>
+              <td>One-time, known expenses</td>
+            </tr>
+            <tr>
+              <td>Draw flexibility</td>
+              <td class="td-good">Borrow as needed</td>
+              <td class="td-bad">Lump sum only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>Don't choose on rate alone</strong>
+          <p>A HELOC's lower starting rate can look attractive, but because it's variable, your total cost over the full term is uncertain. A home equity loan locks in your cost from day one, even if the starting rate is slightly higher.</p>
+        </div>
+      </div>
+
+      <h2>Next Steps</h2>
+      <p>If debt consolidation is your goal, our <a href="/calculators/debt-consolidation-calculator/">Debt Consolidation Calculator</a> shows the savings either option could deliver. If you're weighing a HELOC against refinancing your whole mortgage instead, see <a href="/calculators/heloc-vs-cash-out-refinance/">HELOC vs. Cash-Out Refinance</a>.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">HELOC vs. Home Equity Loan FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Which has lower closing costs?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Closing costs are generally similar for both, though some lenders offer HELOCs with reduced or waived closing costs as an incentive. Always ask your lender for a full breakdown of fees for both products before deciding.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Can I switch from a HELOC to a fixed rate later?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Some lenders offer a "rate-lock" feature that lets you convert all or part of your HELOC balance to a fixed rate during the draw period. This isn't universal — check with your specific lender if payment certainty matters to you.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Is the interest tax-deductible on either option?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Both HELOC and home equity loan interest follow the same IRS rule: it's only deductible if the funds are used to buy, build, or substantially improve the home securing the loan. Consult a tax professional for guidance specific to your situation.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/heloc-payment-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payment Calculator</a></li>
+        <li><a href="/calculators/debt-consolidation-calculator/"><i class="ti ti-arrow-right"></i> Debt Consolidation Calculator</a></li>
+        <li><a href="/calculators/heloc-vs-cash-out-refinance/"><i class="ti ti-arrow-right"></i> HELOC vs Cash-Out Refinance</a></li>
+        <li><a href="/calculators/borrowing-power-calculator/"><i class="ti ti-arrow-right"></i> Borrowing Power Calculator</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+        <li><a href="/blog/what-is-a-heloc/"><i class="ti ti-arrow-right"></i> What is a HELOC?</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+
+  <div class="author-bio">
+    <div class="author-avatar">
+      <i class="ti ti-user" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity.
+        <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/what-is-a-heloc/">What is a HELOC?</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(num) {
+    return '$' + Math.round(num).toLocaleString('en-US');
+  }
+
+  function amortizedPayment(principal, annualRate, years) {
+    const monthlyRate = (annualRate / 100) / 12;
+    const months = years * 12;
+    if (monthlyRate === 0) return principal / months;
+    return principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+  }
+
+  function compareLoans() {
+    const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
+    const repayTerm = parseFloat(document.getElementById('repayTerm').value) || 1;
+    const helocRate = parseFloat(document.getElementById('helocRate').value) || 0;
+    const helRate = parseFloat(document.getElementById('helRate').value) || 0;
+
+    const months = repayTerm * 12;
+
+    const helocPayment = amortizedPayment(loanAmount, helocRate, repayTerm);
+    const helPayment = amortizedPayment(loanAmount, helRate, repayTerm);
+
+    const helocTotal = helocPayment * months;
+    const helTotal = helPayment * months;
+
+    const helocInterest = helocTotal - loanAmount;
+    const helInterest = helTotal - loanAmount;
+
+    // Populate summary boxes
+    document.getElementById('helocPayment').textContent = formatCurrency(helocPayment);
+    document.getElementById('helPayment').textContent = formatCurrency(helPayment);
+
+    // Populate table
+    document.getElementById('tblHelocPayment').textContent = formatCurrency(helocPayment);
+    document.getElementById('tblHelPayment').textContent = formatCurrency(helPayment);
+    document.getElementById('tblHelocInterest').textContent = formatCurrency(helocInterest);
+    document.getElementById('tblHelInterest').textContent = formatCurrency(helInterest);
+    document.getElementById('tblHelocTotal').textContent = formatCurrency(helocTotal);
+    document.getElementById('tblHelTotal').textContent = formatCurrency(helTotal);
+
+    // Dynamic explainer
+    const diff = Math.abs(helocTotal - helTotal);
+    const cheaper = helocTotal < helTotal ? 'the HELOC' : 'the home equity loan';
+    document.getElementById('resultExplainer').textContent =
+      `At today's rates, ${cheaper} costs approximately ${formatCurrency(diff)} less over ${repayTerm} years — but remember the HELOC rate is variable and could rise, while the home equity loan rate is locked for the full term. Factor in your tolerance for payment changes, not just today's numbers.`;
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Calculate on load with default values
+  document.addEventListener('DOMContentLoaded', compareLoans);
+</script>
+
+</body>
+</html>
