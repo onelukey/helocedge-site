@@ -258,6 +258,18 @@ footer { background: var(--navy); padding: 3rem 2rem 2rem; color: rgba(255,255,2
 .debt-row-header { display: grid; grid-template-columns: 1.5fr 1fr 1fr auto; gap: 0.75rem; margin-bottom: 0.5rem; }
 .debt-row-header span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-muted); }
 
+/* ── LTV GAUGE (LTV calculator) ── */
+.ltv-gauge-wrap { text-align: center; margin: 0.5rem 0 1.75rem; }
+.ltv-gauge-value { font-family: 'DM Serif Display', serif; font-size: 2.75rem; color: var(--navy); line-height: 1; }
+.ltv-gauge-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+.ltv-bar-track { width: 100%; height: 14px; background: var(--bg); border-radius: 100px; overflow: hidden; margin-top: 1rem; border: 1px solid var(--border); }
+.ltv-bar-fill { height: 100%; border-radius: 100px; transition: width 0.4s ease, background 0.4s ease; }
+.ltv-bar-marks { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 0.4rem; }
+.ltv-status-pill { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600; padding: 0.35rem 0.9rem; border-radius: 100px; margin-top: 1rem; }
+.ltv-status-good { background: #f0fdf4; color: #166534; }
+.ltv-status-warn { background: #fff7ed; color: #c2410c; }
+.ltv-status-bad { background: #fef2f2; color: #b91c1c; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .nav { position: relative; }
