@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LTV Calculator — Loan-to-Value Ratio for HELOC Eligibility | HELOCEdge.com</title>
+  <meta name="description" content="Free LTV calculator. Find your loan-to-value and combined loan-to-value (CLTV) ratio instantly to see if you qualify for a HELOC." />
+  <link rel="canonical" href="https://www.helocedge.com/calculators/ltv-calculator/" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9RLKEB7GMX');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-chart-pie"></i> Core Calculator</div>
+    <h1>LTV Calculator</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 2 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>Calculate Your Loan-to-Value Ratio</h2>
+      <p class="calc-widget-sub">Your LTV (or CLTV if you have a second mortgage) is one of the first things lenders check for HELOC eligibility.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="homeValue">Home Value</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="homeValue" class="with-prefix" value="450000" min="0" step="5000" />
+          </div>
+          <span class="field-hint">Current estimated market value</span>
+        </div>
+
+        <div class="field">
+          <label for="mortgageBalance">Mortgage Balance</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="mortgageBalance" class="with-prefix" value="220000" min="0" step="5000" />
+          </div>
+          <span class="field-hint">What you still owe on your primary mortgage</span>
+        </div>
+
+        <div class="field">
+          <label for="otherLiens">Other Liens (optional) <i class="ti ti-info-circle" title="Second mortgage or existing HELOC balance"></i></label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="otherLiens" class="with-prefix" value="0" min="0" step="1000" />
+          </div>
+          <span class="field-hint">Leave at $0 if none — adding this calculates CLTV instead</span>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calculateLtv()">
+        <i class="ti ti-calculator"></i> Calculate My LTV
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="ltv-gauge-wrap">
+          <div class="ltv-gauge-value" id="ltvValue">0%</div>
+          <div class="ltv-gauge-label" id="ltvTypeLabel">Loan-to-Value Ratio</div>
+          <div class="ltv-bar-track">
+            <div class="ltv-bar-fill" id="ltvBarFill" style="width: 0%; background: var(--navy);"></div>
+          </div>
+          <div class="ltv-bar-marks">
+            <span>0%</span>
+            <span>50%</span>
+            <span>80%</span>
+            <span>100%</span>
+          </div>
+          <div class="ltv-status-pill" id="ltvStatusPill"></div>
+        </div>
+
+        <div class="results-table-wrap">
+          <h3>Calculation Breakdown</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Home Value</td>
+                  <td id="tblHomeValue">$0</td>
+                </tr>
+                <tr>
+                  <td>Total Debt Secured Against Home</td>
+                  <td id="tblTotalDebt">$0</td>
+                </tr>
+                <tr style="font-weight:600;">
+                  <td id="tblRatioLabel">LTV Ratio</td>
+                  <td id="tblRatio">0%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">Most lenders require an LTV or CLTV of 80–90% or lower to approve a HELOC.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>What Is LTV and Why It Matters</h2>
+      <p>Loan-to-Value (LTV) is the percentage of your home's value that's covered by debt. It's calculated as: <strong>Mortgage Balance ÷ Home Value × 100</strong>. Lenders use this figure to assess risk — the lower your LTV, the more equity cushion you have, and the more confident a lender is in approving you for additional borrowing like a HELOC.</p>
+
+      <h3>LTV vs. CLTV — What's the Difference?</h3>
+      <p>LTV considers only your primary mortgage. <strong>CLTV (Combined Loan-to-Value)</strong> adds in any other debt secured against your home — a second mortgage, an existing HELOC, or any other lien — divided by your home's value. If you have any additional liens, lenders will use your CLTV, not your plain LTV, to assess HELOC eligibility.</p>
+
+      <h3>What Counts as a "Good" LTV?</h3>
+      <ul>
+        <li><strong>Below 60%:</strong> Excellent — strong equity position, most lenders will approve favorable terms</li>
+        <li><strong>60–80%:</strong> Good — within typical lender comfort zone for most HELOC products</li>
+        <li><strong>80–90%:</strong> Borderline — some lenders approve here, often with a higher rate or stricter requirements</li>
+        <li><strong>Above 90%:</strong> Difficult — few lenders will extend a HELOC at this level</li>
+      </ul>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>Your home value estimate matters</strong>
+          <p>Using an inflated home value will give you an artificially low LTV. For accuracy, base your figure on a recent appraisal or a conservative estimate from a reputable home value tool, not just what you hope your home is worth.</p>
+        </div>
+      </div>
+
+      <h2>Next Steps</h2>
+      <p>Once you know your LTV, the natural next step is finding out exactly how much you could borrow. Try our <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a> for your maximum HELOC credit line.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">LTV Calculator FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              What LTV do I need to qualify for a HELOC?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Most lenders want a combined LTV (CLTV) of 80–90% or lower, meaning you have at least 10–20% equity remaining after the HELOC is added. Requirements vary by lender, credit score, and loan type.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              How do I find my home's current value?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">A recent professional appraisal is most accurate. For a quick estimate, online home value tools (like those from major real estate platforms) can give a reasonable starting figure, though lenders will typically order their own appraisal during the application process.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Does a lower LTV get me a better interest rate?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Often, yes. A lower LTV signals less risk to the lender, which can translate into a more favorable interest rate or better terms compared to borrowers closer to the maximum allowed LTV.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/borrowing-power-calculator/"><i class="ti ti-arrow-right"></i> Borrowing Power Calculator</a></li>
+        <li><a href="/calculators/heloc-payment-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payment Calculator</a></li>
+        <li><a href="/calculators/home-equity-tracker/"><i class="ti ti-arrow-right"></i> Home Equity Tracker</a></li>
+        <li><a href="/calculators/heloc-vs-home-equity-loan/"><i class="ti ti-arrow-right"></i> HELOC vs Home Equity Loan</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+        <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/"><i class="ti ti-arrow-right"></i> How Much Can I Borrow?</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+
+  <div class="author-bio">
+    <div class="author-avatar">
+      <i class="ti ti-user" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity.
+        <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/what-is-a-heloc/">What is a HELOC?</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(num) {
+    return '$' + Math.round(num).toLocaleString('en-US');
+  }
+
+  function calculateLtv() {
+    const homeValue = parseFloat(document.getElementById('homeValue').value) || 0;
+    const mortgageBalance = parseFloat(document.getElementById('mortgageBalance').value) || 0;
+    const otherLiens = parseFloat(document.getElementById('otherLiens').value) || 0;
+
+    const totalDebt = mortgageBalance + otherLiens;
+    const ratio = homeValue > 0 ? (totalDebt / homeValue) * 100 : 0;
+    const isCltv = otherLiens > 0;
+    const label = isCltv ? 'CLTV' : 'LTV';
+
+    // Gauge value + label
+    document.getElementById('ltvValue').textContent = ratio.toFixed(1) + '%';
+    document.getElementById('ltvTypeLabel').textContent = isCltv ? 'Combined Loan-to-Value (CLTV)' : 'Loan-to-Value (LTV) Ratio';
+
+    // Bar fill
+    const barFill = document.getElementById('ltvBarFill');
+    const clampedWidth = Math.min(ratio, 100);
+    barFill.style.width = clampedWidth + '%';
+
+    // Status pill + colour logic
+    const pill = document.getElementById('ltvStatusPill');
+    let statusClass, statusText, barColor;
+    if (ratio < 60) {
+      statusClass = 'ltv-status-good'; statusText = '✓ Excellent position'; barColor = '#16a34a';
+    } else if (ratio < 80) {
+      statusClass = 'ltv-status-good'; statusText = '✓ Good — within typical lender range'; barColor = '#16a34a';
+    } else if (ratio < 90) {
+      statusClass = 'ltv-status-warn'; statusText = '⚠ Borderline — varies by lender'; barColor = '#ea580c';
+    } else {
+      statusClass = 'ltv-status-bad'; statusText = '✕ Above typical lender limits'; barColor = '#dc2626';
+    }
+    pill.className = 'ltv-status-pill ' + statusClass;
+    pill.textContent = statusText;
+    barFill.style.background = barColor;
+
+    // Table
+    document.getElementById('tblHomeValue').textContent = formatCurrency(homeValue);
+    document.getElementById('tblTotalDebt').textContent = formatCurrency(totalDebt);
+    document.getElementById('tblRatioLabel').textContent = label + ' Ratio';
+    document.getElementById('tblRatio').textContent = ratio.toFixed(1) + '%';
+
+    // Explainer
+    document.getElementById('resultExplainer').textContent =
+      `Your ${label} is ${ratio.toFixed(1)}%, based on ${formatCurrency(totalDebt)} in debt against a ${formatCurrency(homeValue)} home value. Most lenders require 80–90% or lower to approve a HELOC, so ${ratio < 90 ? 'you likely meet the typical threshold, though final approval also depends on credit score and income' : 'you may find it difficult to qualify with most lenders at this level'}.`;
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Calculate on load with default values
+  document.addEventListener('DOMContentLoaded', calculateLtv);
+</script>
+
+</body>
+</html>
