@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About HELOCEdge.com — Independent HELOC Education</title>
+  <meta name="description" content="Learn about HELOCEdge.com, an independent publisher of free HELOC calculators and educational content for US homeowners, founded by Mike Lucas." />
+  <link rel="canonical" href="https://www.helocedge.com/about/" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9RLKEB7GMX');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/" class="active">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-info-circle"></i> About Us</div>
+    <h1>About HELOCEdge.com</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap" style="grid-template-columns: 1fr;">
+
+  <main style="max-width: 760px;">
+
+    <div class="article-content">
+      <h2>Why HELOCEdge.com Exists</h2>
+      <p>Home Equity Lines of Credit are one of the most commonly searched, and most commonly misunderstood, financial products available to American homeowners. Lenders advertise the appealing parts, draw-period flexibility, lower starting rates, but the fine print around variable rates, repayment-period payment jumps, and combined loan-to-value limits often gets glossed over.</p>
+      <p>HELOCEdge.com was built to fix that. Every calculator on this site exists to answer one specific, practical question a homeowner might be asking themselves before they ever speak to a lender, in plain English, with no sales pitch attached.</p>
+
+      <h2>Who's Behind This Site</h2>
+      <p>HELOCEdge.com is an independent publication researched, written, and maintained by Mike Lucas. Mike is based in the UK and has spent years building informational, education-first websites covering personal finance topics for a US audience. He has no lending background and no financial industry affiliation; his focus is purely on researching publicly available information, government and industry data sources, and presenting it clearly.</p>
+      <p>AI writing tools are used to help research and draft content more efficiently, with all output reviewed and edited before publishing. This disclosure is included on every page of the site in the interest of transparency.</p>
+
+      <div class="callout callout-tip">
+        <i class="ti ti-shield-check"></i>
+        <div class="callout-content">
+          <strong>No lender relationships</strong>
+          <p>HELOCEdge.com does not partner with, receive commission from, or have any financial relationship with any lender, bank, or financial institution. The calculators and content here are not influenced by advertising or sponsorship from any financial company.</p>
+        </div>
+      </div>
+
+      <h2>How the Calculators Work</h2>
+      <p>Every calculator on this site uses standard, publicly documented financial formulas, the same amortization and loan-to-value calculations lenders themselves use internally. None of the figures produced are guarantees or offers of credit; they are estimates intended to help you understand your situation before discussing it with a licensed professional.</p>
+
+      <h2>Our Approach to Accuracy</h2>
+      <p>Where this site references current rates or market data, it links directly to primary sources, such as Freddie Mac's published mortgage rate data, rather than displaying static figures that quickly become outdated. Content is reviewed periodically to ensure it reflects current lending practices and terminology.</p>
+
+      <h2>Questions or Feedback?</h2>
+      <p>If you spot an error, have a suggestion for a new calculator, or just want to get in touch, visit the <a href="/contact/">Contact page</a> — Mike reads every message personally.</p>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+
+  <div class="author-bio">
+    <div class="author-avatar">
+      <i class="ti ti-user" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/what-is-a-heloc/">What is a HELOC?</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+</body>
+</html>
