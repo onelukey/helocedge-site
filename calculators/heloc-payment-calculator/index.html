@@ -1,0 +1,435 @@
+placeholder<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HELOC Payment Calculator — Estimate Draw & Repayment Costs | HELOCEdge.com</title>
+  <meta name="description" content="Free HELOC payment calculator. Estimate your monthly payments during both the draw period and repayment period, based on your balance, rate, and term." />
+  <link rel="canonical" href="https://www.helocedge.com/calculators/heloc-payment-calculator/" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9RLKEB7GMX');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-calculator"></i> Core Calculator</div>
+    <h1>HELOC Payment Calculator</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 2 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>Estimate Your Monthly Payments</h2>
+      <p class="calc-widget-sub">Enter your HELOC details below to see what you'd pay during both the draw period and the repayment period.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="balance">HELOC Balance <i class="ti ti-info-circle" title="The amount you plan to draw or currently owe"></i></label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="balance" class="with-prefix" value="50000" min="0" step="1000" />
+          </div>
+          <span class="field-hint">Amount drawn or owed on your credit line</span>
+        </div>
+
+        <div class="field">
+          <label for="rate">Interest Rate <i class="ti ti-info-circle" title="Your current variable APR"></i></label>
+          <div class="field-input-wrap">
+            <input type="number" id="rate" class="with-suffix" value="8.5" min="0" step="0.1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Most HELOCs use a variable rate</span>
+        </div>
+
+        <div class="field">
+          <label for="drawYears">Draw Period</label>
+          <div class="field-input-wrap">
+            <input type="number" id="drawYears" class="with-suffix" value="10" min="1" max="20" step="1" />
+            <span class="field-suffix">yrs</span>
+          </div>
+          <span class="field-hint">Typically 10 years</span>
+        </div>
+
+        <div class="field">
+          <label for="repayYears">Repayment Period</label>
+          <div class="field-input-wrap">
+            <input type="number" id="repayYears" class="with-suffix" value="20" min="1" max="30" step="1" />
+            <span class="field-suffix">yrs</span>
+          </div>
+          <span class="field-hint">Typically 15–20 years</span>
+        </div>
+      </div>
+
+      <div class="rate-explainer">
+        <i class="ti ti-info-circle"></i>
+        <span>Most HELOCs carry a <strong>variable interest rate</strong> tied to the U.S. prime rate, meaning your payment can rise or fall over time. Check the current average via <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac's published rates</a> before entering your figure.</span>
+      </div>
+
+      <button class="calc-btn" onclick="calculatePayments()">
+        <i class="ti ti-calculator"></i> Calculate My Payments
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="results-summary">
+          <div class="result-box">
+            <div class="result-box-label">Draw Period Payment</div>
+            <div class="result-box-value" id="drawPayment">$0</div>
+            <div class="result-box-sub">Interest-only, per month</div>
+          </div>
+          <div class="result-box gold">
+            <div class="result-box-label">Repayment Period Payment</div>
+            <div class="result-box-value" id="repayPayment">$0</div>
+            <div class="result-box-sub">Principal + interest, per month</div>
+          </div>
+        </div>
+
+        <div class="results-table-wrap">
+          <h3>Lifetime Cost Summary</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Monthly Payment</th>
+                  <th>Duration</th>
+                  <th>Total Paid</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Draw Period (interest-only)</td>
+                  <td id="tblDrawPayment">$0</td>
+                  <td id="tblDrawYears">0 yrs</td>
+                  <td id="tblDrawTotal">$0</td>
+                </tr>
+                <tr>
+                  <td>Repayment Period</td>
+                  <td id="tblRepayPayment">$0</td>
+                  <td id="tblRepayYears">0 yrs</td>
+                  <td id="tblRepayTotal">$0</td>
+                </tr>
+                <tr style="font-weight:600;">
+                  <td>Total Over Life of HELOC</td>
+                  <td>—</td>
+                  <td id="tblTotalYears">0 yrs</td>
+                  <td id="tblGrandTotal">$0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">During the draw period you only pay interest on what you've borrowed, so payments are lower. Once repayment begins, you'll pay both principal and interest — expect your monthly payment to rise.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>How HELOC Payments Work</h2>
+      <p>A HELOC (Home Equity Line of Credit) has two distinct phases, and your payment changes significantly between them. Understanding this structure is the single most important thing to get right before taking one out.</p>
+
+      <h3>The Draw Period</h3>
+      <p>This is typically the first 10 years of your HELOC. You can borrow, repay, and borrow again up to your credit limit — much like a credit card. During this phase, most lenders only require <strong>interest-only payments</strong> on whatever balance you've drawn. This keeps payments low, but your principal balance doesn't reduce unless you choose to pay more.</p>
+
+      <h3>The Repayment Period</h3>
+      <p>Once the draw period ends, you can no longer borrow against the line. Instead, you enter a repayment period — typically 15 to 20 years — where you pay back both principal and interest, similar to a standard mortgage. This is where many homeowners are caught off guard: the jump from interest-only to full amortizing payments can mean your monthly payment increases substantially.</p>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>Common pitfall</strong>
+          <p>Many homeowners budget for the draw period payment and don't plan for the increase when repayment begins. Always calculate both figures before borrowing — that's exactly what the tool above does.</p>
+        </div>
+      </div>
+
+      <h2>Why Your Rate Matters So Much</h2>
+      <p>Because HELOC rates are usually variable, the interest rate you enter today may not be the rate you pay in year three or year eight. The rate moves with the U.S. prime rate, which is influenced by Federal Reserve policy decisions. A rate rise of even 1–2% can meaningfully change your monthly payment, particularly during the repayment period when principal is included.</p>
+      <p>If you want to stress-test your numbers against a rate increase, try our <a href="/calculators/variable-rate-impact-calculator/">Variable Rate Impact Calculator</a> next.</p>
+
+      <h2>What This Calculator Doesn't Include</h2>
+      <p>This tool estimates principal and interest only. It does not include lender fees, annual maintenance charges, appraisal costs, or closing costs, which vary by lender. Always request a full Loan Estimate from your lender for an exact figure.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">HELOC Payment FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Do I have to pay principal during the draw period?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Usually not. Most HELOCs only require interest-only payments during the draw period. However, you can choose to pay down principal voluntarily, which reduces your balance and lowers what you'll owe once repayment begins.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Why does my payment jump so much in the repayment period?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Because you switch from interest-only payments to full amortizing payments that include both principal and interest. If you only made minimum payments during the draw period, the jump can be significant — sometimes doubling or more.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Can I refinance a HELOC before the repayment period starts?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Yes. Many homeowners refinance into a new HELOC, convert to a fixed-rate home equity loan, or roll the balance into a cash-out refinance before repayment begins, particularly if rates have changed or the new payment isn't affordable.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/borrowing-power-calculator/"><i class="ti ti-arrow-right"></i> Borrowing Power Calculator</a></li>
+        <li><a href="/calculators/heloc-payoff-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payoff Calculator</a></li>
+        <li><a href="/calculators/variable-rate-impact-calculator/"><i class="ti ti-arrow-right"></i> Variable Rate Impact Calculator</a></li>
+        <li><a href="/calculators/heloc-vs-home-equity-loan/"><i class="ti ti-arrow-right"></i> HELOC vs Home Equity Loan</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+        <li><a href="/blog/what-is-a-heloc/"><i class="ti ti-arrow-right"></i> What is a HELOC?</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+
+  <div class="author-bio">
+    <div class="author-avatar">
+      <i class="ti ti-user" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity.
+        <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/what-is-a-heloc/">What is a HELOC?</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(num) {
+    return '$' + Math.round(num).toLocaleString('en-US');
+  }
+
+  function calculatePayments() {
+    const balance = parseFloat(document.getElementById('balance').value) || 0;
+    const annualRate = parseFloat(document.getElementById('rate').value) || 0;
+    const drawYears = parseFloat(document.getElementById('drawYears').value) || 0;
+    const repayYears = parseFloat(document.getElementById('repayYears').value) || 0;
+
+    const monthlyRate = (annualRate / 100) / 12;
+
+    // Draw period: interest-only payment
+    const drawPayment = balance * monthlyRate;
+    const drawMonths = drawYears * 12;
+    const drawTotal = drawPayment * drawMonths;
+
+    // Repayment period: standard amortizing payment on remaining balance
+    const repayMonths = repayYears * 12;
+    let repayPayment;
+    if (monthlyRate > 0) {
+      repayPayment = balance * (monthlyRate * Math.pow(1 + monthlyRate, repayMonths)) / (Math.pow(1 + monthlyRate, repayMonths) - 1);
+    } else {
+      repayPayment = balance / repayMonths;
+    }
+    const repayTotal = repayPayment * repayMonths;
+
+    const grandTotal = drawTotal + repayTotal;
+    const totalYears = drawYears + repayYears;
+
+    // Populate summary boxes
+    document.getElementById('drawPayment').textContent = formatCurrency(drawPayment);
+    document.getElementById('repayPayment').textContent = formatCurrency(repayPayment);
+
+    // Populate table
+    document.getElementById('tblDrawPayment').textContent = formatCurrency(drawPayment);
+    document.getElementById('tblDrawYears').textContent = drawYears + ' yrs';
+    document.getElementById('tblDrawTotal').textContent = formatCurrency(drawTotal);
+
+    document.getElementById('tblRepayPayment').textContent = formatCurrency(repayPayment);
+    document.getElementById('tblRepayYears').textContent = repayYears + ' yrs';
+    document.getElementById('tblRepayTotal').textContent = formatCurrency(repayTotal);
+
+    document.getElementById('tblTotalYears').textContent = totalYears + ' yrs';
+    document.getElementById('tblGrandTotal').textContent = formatCurrency(grandTotal);
+
+    // Dynamic explainer
+    const increase = repayPayment - drawPayment;
+    const increasePct = drawPayment > 0 ? Math.round((increase / drawPayment) * 100) : 0;
+    document.getElementById('resultExplainer').textContent =
+      `During your ${drawYears}-year draw period, you'd pay interest-only at roughly ${formatCurrency(drawPayment)}/month. ` +
+      `Once repayment begins, your payment rises to approximately ${formatCurrency(repayPayment)}/month — about a ${increasePct}% increase — as you start paying down principal alongside interest.`;
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Calculate on load with default values
+  document.addEventListener('DOMContentLoaded', calculatePayments);
+</script>
+
+</body>
+</html>
