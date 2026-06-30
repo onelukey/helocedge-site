@@ -270,6 +270,10 @@ footer { background: var(--navy); padding: 3rem 2rem 2rem; color: rgba(255,255,2
 .ltv-status-warn { background: #fff7ed; color: #c2410c; }
 .ltv-status-bad { background: #fef2f2; color: #b91c1c; }
 
+/* ── COMING SOON CARD (calculators index) ── */
+.coming-soon-card { opacity: 0.55; pointer-events: none; position: relative; }
+.coming-soon-tag { position: absolute; top: 1rem; right: 1rem; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; background: var(--bg); color: var(--text-muted); padding: 0.2rem 0.5rem; border-radius: 100px; border: 1px solid var(--border); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .nav { position: relative; }
