@@ -1,66 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Homepage & Calculator -->
+
+  <!-- ── HOMEPAGE ── -->
   <url>
-    <loc>https://helocedge.com/</loc>
-    <lastmod>2026-06-04</lastmod>
+    <loc>https://www.helocedge.com/</loc>
     <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
+    <priority>1.0</priority>
   </url>
-  
-  <!-- Blog Directory Feed -->
+
+  <!-- ── CALCULATORS HUB ── -->
   <url>
-    <loc>https://helocedge.com/blog/index.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <loc>https://www.helocedge.com/calculators/</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.9</priority>
   </url>
 
-  <!-- Article 1: HELOC vs Home Equity Loan -->
+  <!-- ── CORE CALCULATORS ── -->
   <url>
-    <loc>https://helocedge.com/blog/heloc-vs-home-equity-loan.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <loc>https://www.helocedge.com/calculators/heloc-payment-calculator/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.9</priority>
   </url>
-
-  <!-- Article 2: Debt Consolidation -->
   <url>
-    <loc>https://helocedge.com/blog/using-heloc-for-debt-consolidation.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <loc>https://www.helocedge.com/calculators/borrowing-power-calculator/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.9</priority>
   </url>
-
-  <!-- Article 3: How Much Can I Borrow -->
   <url>
-    <loc>https://helocedge.com/blog/how-much-can-i-borrow-with-a-heloc.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <loc>https://www.helocedge.com/calculators/ltv-calculator/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/calculators/interest-only-payment-calculator/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/calculators/heloc-payoff-calculator/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
-  <!-- Privacy Policy Compliance Page -->
+  <!-- ── COMPARE CALCULATORS ── -->
   <url>
-    <loc>https://helocedge.com/privacy.html</loc>
-    <lastmod>2026-06-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.30</priority>
+    <loc>https://www.helocedge.com/calculators/heloc-vs-home-equity-loan/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/calculators/debt-consolidation-calculator/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
-  <!-- Financial Disclaimer Compliance Page -->
+  <!-- ── PLANNING CALCULATORS ── -->
   <url>
-    <loc>https://helocedge.com/disclaimer.html</loc>
-    <lastmod>2026-06-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.30</priority>
+    <loc>https://www.helocedge.com/calculators/home-equity-tracker/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
-  <!-- Contact Us Page -->
+  <!-- ── BLOG ── -->
   <url>
-    <loc>https://helocedge.com/contact.html</loc>
-    <lastmod>2026-06-05</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.30</priority>
+    <loc>https://www.helocedge.com/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.helocedge.com/blog/how-much-can-i-borrow-with-a-heloc/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/blog/heloc-vs-home-equity-loan/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/blog/using-heloc-for-debt-consolidation/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ── SITE PAGES ── -->
+  <url>
+    <loc>https://www.helocedge.com/about/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/contact/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/disclaimer/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/privacy-policy/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.helocedge.com/terms-of-use/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
 </urlset>
