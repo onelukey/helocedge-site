@@ -292,6 +292,25 @@ footer { background: var(--navy); padding: 3rem 2rem 2rem; color: rgba(255,255,2
 .blog-card-link { font-size: 0.82rem; font-weight: 600; color: var(--gold-dark); display: flex; align-items: center; gap: 0.3rem; }
 .blog-card:hover .blog-card-link { color: var(--navy); }
 
+/* ── INTEREST-ONLY SCENARIO GRID ── */
+.draw-scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+.draw-scenario { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+.draw-scenario-amount { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 0.2rem; }
+.draw-scenario-label { font-size: 0.72rem; color: var(--text-muted); }
+
+/* ── HOME EQUITY TRACKER ── */
+.equity-bar-wrap { margin: 1.5rem 0; }
+.equity-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.equity-bar-label { font-size: 0.78rem; color: var(--text-muted); width: 60px; flex-shrink: 0; text-align: right; }
+.equity-bar-track { flex-grow: 1; height: 22px; background: var(--bg); border-radius: 100px; overflow: hidden; border: 1px solid var(--border); }
+.equity-bar-equity { height: 100%; background: var(--navy); border-radius: 100px 0 0 100px; transition: width 0.4s ease; }
+.equity-bar-value { font-size: 0.78rem; font-weight: 600; color: var(--navy); width: 80px; flex-shrink: 0; }
+.equity-milestone { background: var(--navy-light); border: 1px solid rgba(15,37,87,0.12); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+.equity-milestone-label { font-size: 0.83rem; color: var(--navy); font-weight: 600; }
+.equity-milestone-value { font-size: 0.83rem; color: var(--text-muted); }
+.equity-milestone.reached { background: #f0fdf4; border-color: #bbf7d0; }
+.equity-milestone.reached .equity-milestone-label { color: #166534; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .nav { position: relative; }
@@ -306,4 +325,6 @@ footer { background: var(--navy); padding: 3rem 2rem 2rem; color: rgba(255,255,2
   .results-summary { grid-template-columns: 1fr; }
   .debt-row, .debt-row-header { grid-template-columns: 1fr 1fr; }
   .debt-row-header span:nth-child(3), .debt-row-header span:nth-child(4) { display: none; }
+  .draw-scenario-grid { grid-template-columns: 1fr; }
+  .equity-bar-label { width: 40px; font-size: 0.7rem; }
 }
