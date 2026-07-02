@@ -1,1 +1,414 @@
-place
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HELOC Borrowing Power Calculator — How Much Can You Borrow? | HELOCEdge.com</title>
+  <meta name="description" content="Free HELOC borrowing power calculator. Find out your maximum home equity credit line based on your home value, mortgage balance, and lender LTV limit." />
+  <link rel="canonical" href="https://www.helocedge.com/calculators/borrowing-power-calculator/" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9RLKEB7GMX');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-home-dollar"></i> Core Calculator</div>
+    <h1>Borrowing Power Calculator</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 2 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>How Much Can You Borrow?</h2>
+      <p class="calc-widget-sub">Enter your home value, mortgage balance, and your lender's LTV limit to find your maximum HELOC credit line.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="homeValue">Home Value <i class="ti ti-info-circle" title="Current estimated market value of your home"></i></label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="homeValue" class="with-prefix" value="450000" min="0" step="5000" />
+          </div>
+          <span class="field-hint">Use a recent appraisal or estimate</span>
+        </div>
+
+        <div class="field">
+          <label for="mortgageBalance">Remaining Mortgage Balance</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="mortgageBalance" class="with-prefix" value="220000" min="0" step="5000" />
+          </div>
+          <span class="field-hint">What you still owe on your primary mortgage</span>
+        </div>
+
+        <div class="field">
+          <label for="otherLiens">Other Liens / 2nd Mortgages</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="otherLiens" class="with-prefix" value="0" min="0" step="1000" />
+          </div>
+          <span class="field-hint">Existing HELOC or second mortgage balance, if any</span>
+        </div>
+
+        <div class="field">
+          <label for="ltvLimit">Lender LTV Limit <i class="ti ti-info-circle" title="Maximum combined loan-to-value your lender allows"></i></label>
+          <div class="field-input-wrap">
+            <input type="number" id="ltvLimit" class="with-suffix" value="85" min="50" max="100" step="1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Most lenders allow 80–90% CLTV</span>
+        </div>
+      </div>
+
+      <div class="rate-explainer">
+        <i class="ti ti-info-circle"></i>
+        <span>Lenders calculate your <strong>Combined Loan-to-Value (CLTV)</strong> — all debt secured against your home, divided by its value. Most allow you to borrow up to 80–90% CLTV, though this varies by lender, credit score, and loan type.</span>
+      </div>
+
+      <button class="calc-btn" onclick="calculateBorrowingPower()">
+        <i class="ti ti-calculator"></i> Calculate My Borrowing Power
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="results-summary">
+          <div class="result-box gold">
+            <div class="result-box-label">Maximum HELOC Credit Line</div>
+            <div class="result-box-value" id="maxCreditLine">$0</div>
+            <div class="result-box-sub">Available equity you could borrow</div>
+          </div>
+          <div class="result-box">
+            <div class="result-box-label">Current CLTV</div>
+            <div class="result-box-value" id="currentCltv">0%</div>
+            <div class="result-box-sub">Combined loan-to-value today</div>
+          </div>
+        </div>
+
+        <div class="results-table-wrap">
+          <h3>Equity Breakdown</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Home Value</td>
+                  <td id="tblHomeValue">$0</td>
+                </tr>
+                <tr>
+                  <td>Total Existing Debt (mortgage + liens)</td>
+                  <td id="tblExistingDebt">$0</td>
+                </tr>
+                <tr>
+                  <td>Maximum Allowed Debt at LTV Limit</td>
+                  <td id="tblMaxDebt">$0</td>
+                </tr>
+                <tr style="font-weight:600;">
+                  <td>Available HELOC Credit Line</td>
+                  <td id="tblAvailable">$0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">Based on your numbers, your home has enough equity to support a HELOC at your lender's LTV limit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>How Lenders Calculate Your Borrowing Power</h2>
+      <p>Your HELOC borrowing power isn't based on your home's value alone — it's based on your <strong>available equity</strong> after subtracting everything you already owe against the property. Lenders express this as a ratio called Combined Loan-to-Value, or CLTV.</p>
+
+      <h3>The Formula</h3>
+      <p>Lenders typically use this calculation:</p>
+      <p><strong>(Home Value × Maximum LTV%) − Existing Mortgage Balance − Other Liens = Available HELOC Credit Line</strong></p>
+      <p>For example, on a $450,000 home with an 85% LTV limit and a $220,000 mortgage balance, the maximum combined debt allowed is $382,500. Subtracting the existing mortgage leaves $162,500 in potential HELOC credit.</p>
+
+      <h3>Why Lenders Set an LTV Limit</h3>
+      <p>The LTV limit protects the lender if home values fall. By capping combined debt below 100% of the home's value, lenders maintain a buffer of equity that reduces their risk if you're unable to make payments. Limits commonly range from 80% to 90%, depending on the lender, your credit score, and whether the loan is for a primary residence or investment property.</p>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>Important</strong>
+          <p>This calculator estimates your maximum theoretical credit line. Actual approval also depends on your credit score, debt-to-income ratio, income verification, and the specific lender's underwriting criteria. Always confirm your exact figure directly with a lender.</p>
+        </div>
+      </div>
+
+      <h2>What Counts as "Other Liens"?</h2>
+      <p>If you already have a second mortgage, an existing HELOC, or any other loan secured against your home, lenders include this in the CLTV calculation. This reduces your available borrowing power even if your primary mortgage balance is low.</p>
+
+      <h2>Next Steps</h2>
+      <p>Once you know your maximum credit line, the next question is usually what your monthly payments would look like. Try our <a href="/calculators/heloc-payment-calculator/">HELOC Payment Calculator</a> to estimate payments on the amount you're considering borrowing.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">Borrowing Power FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              What's a typical LTV limit for a HELOC?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Most lenders allow a combined loan-to-value (CLTV) of 80% to 90%. Credit unions and some online lenders occasionally go higher, while stricter lenders may cap at 75–80%, particularly for investment properties or borrowers with lower credit scores.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Does my credit score affect how much I can borrow?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Yes. While the LTV limit sets a ceiling, lenders also factor in your credit score and debt-to-income ratio when deciding your actual approved credit line. A lower credit score may mean a lower LTV limit or a smaller approved amount, even if your equity supports more.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Can I borrow 100% of my home's value?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Almost never. Lenders maintain an equity buffer to protect against falling home values, so very few will lend up to 100% CLTV. The vast majority cap combined debt well below the home's full value.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/heloc-payment-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payment Calculator</a></li>
+        <li><a href="/calculators/ltv-calculator/"><i class="ti ti-arrow-right"></i> LTV Calculator</a></li>
+        <li><a href="/calculators/heloc-vs-home-equity-loan/"><i class="ti ti-arrow-right"></i> HELOC vs Home Equity Loan</a></li>
+        <li><a href="/calculators/home-equity-tracker/"><i class="ti ti-arrow-right"></i> Home Equity Tracker</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+        <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/"><i class="ti ti-arrow-right"></i> How Much Can I Borrow?</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+
+  <div class="author-bio">
+    <div class="author-avatar">
+      <i class="ti ti-user" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity.
+        <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/what-is-a-heloc/">What is a HELOC?</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(num) {
+    return '$' + Math.round(num).toLocaleString('en-US');
+  }
+
+  function calculateBorrowingPower() {
+    const homeValue = parseFloat(document.getElementById('homeValue').value) || 0;
+    const mortgageBalance = parseFloat(document.getElementById('mortgageBalance').value) || 0;
+    const otherLiens = parseFloat(document.getElementById('otherLiens').value) || 0;
+    const ltvLimit = parseFloat(document.getElementById('ltvLimit').value) || 0;
+
+    const existingDebt = mortgageBalance + otherLiens;
+    const maxAllowedDebt = homeValue * (ltvLimit / 100);
+    let availableCreditLine = maxAllowedDebt - existingDebt;
+    if (availableCreditLine < 0) availableCreditLine = 0;
+
+    const currentCltv = homeValue > 0 ? (existingDebt / homeValue) * 100 : 0;
+
+    // Populate summary boxes
+    document.getElementById('maxCreditLine').textContent = formatCurrency(availableCreditLine);
+    document.getElementById('currentCltv').textContent = currentCltv.toFixed(1) + '%';
+
+    // Populate table
+    document.getElementById('tblHomeValue').textContent = formatCurrency(homeValue);
+    document.getElementById('tblExistingDebt').textContent = formatCurrency(existingDebt);
+    document.getElementById('tblMaxDebt').textContent = formatCurrency(maxAllowedDebt);
+    document.getElementById('tblAvailable').textContent = formatCurrency(availableCreditLine);
+
+    // Dynamic explainer
+    const explainerEl = document.getElementById('resultExplainer');
+    if (availableCreditLine <= 0) {
+      explainerEl.textContent = `Based on your numbers, your current debt already meets or exceeds your lender's ${ltvLimit}% LTV limit, so you may not currently qualify for additional HELOC credit. You'd need either a higher home valuation, a lower existing balance, or a lender with a higher LTV limit.`;
+    } else {
+      explainerEl.textContent = `Based on a home value of ${formatCurrency(homeValue)} and existing debt of ${formatCurrency(existingDebt)}, you could potentially access up to ${formatCurrency(availableCreditLine)} in HELOC credit at an ${ltvLimit}% LTV limit. Your current CLTV is ${currentCltv.toFixed(1)}%.`;
+    }
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Calculate on load with default values
+  document.addEventListener('DOMContentLoaded', calculateBorrowingPower);
+</script>
+
+</body>
+</html>
