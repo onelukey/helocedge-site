@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HELOC Payoff Calculator — How Long to Pay Off Your Balance? | HELOCEdge.com</title>
+  <meta name="description" content="Free HELOC payoff calculator. Find out how long it will take to pay off your HELOC balance and how much total interest you'll pay at your planned monthly payment." />
+  <link rel="canonical" href="https://www.helocedge.com/calculators/heloc-payoff-calculator/" />
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9RLKEB7GMX');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-clock-check"></i> Core Calculator</div>
+    <h1>HELOC Payoff Calculator</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 2 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>How Long Will It Take to Pay Off Your HELOC?</h2>
+      <p class="calc-widget-sub">Enter your current balance, interest rate, and planned monthly payment to see your payoff timeline and total interest cost.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="balance">Current HELOC Balance</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="balance" class="with-prefix" value="35000" min="0" step="500" />
+          </div>
+          <span class="field-hint">Amount currently owed on your HELOC</span>
+        </div>
+
+        <div class="field">
+          <label for="rate">Interest Rate <i class="ti ti-info-circle" title="Your current variable APR"></i></label>
+          <div class="field-input-wrap">
+            <input type="number" id="rate" class="with-suffix" value="8.5" min="0" step="0.1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Your current HELOC interest rate</span>
+        </div>
+
+        <div class="field">
+          <label for="monthlyPayment">Planned Monthly Payment</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="monthlyPayment" class="with-prefix" value="600" min="0" step="25" />
+          </div>
+          <span class="field-hint">What you plan to pay each month</span>
+        </div>
+      </div>
+
+      <div class="rate-explainer">
+        <i class="ti ti-info-circle"></i>
+        <span>Your monthly payment must exceed the interest-only amount to make progress on the principal. If your payment equals or is less than the monthly interest charge, the balance will never reduce.</span>
+      </div>
+
+      <button class="calc-btn" onclick="calculatePayoff()">
+        <i class="ti ti-calculator"></i> Calculate My Payoff
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="results-summary">
+          <div class="result-box gold">
+            <div class="result-box-label">Payoff Time</div>
+            <div class="result-box-value" id="payoffTime">—</div>
+            <div class="result-box-sub">At your planned payment</div>
+          </div>
+          <div class="result-box">
+            <div class="result-box-label">Total Interest Paid</div>
+            <div class="result-box-value" id="totalInterest">$0</div>
+            <div class="result-box-sub">Over the full payoff period</div>
+          </div>
+        </div>
+
+        <div class="results-table-wrap">
+          <h3>Payoff Summary</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Starting Balance</td>
+                  <td id="tblBalance">$0</td>
+                </tr>
+                <tr>
+                  <td>Monthly Payment</td>
+                  <td id="tblPayment">$0</td>
+                </tr>
+                <tr>
+                  <td>Total Interest Paid</td>
+                  <td id="tblInterest">$0</td>
+                </tr>
+                <tr style="font-weight:600;">
+                  <td>Total Amount Paid</td>
+                  <td id="tblTotal">$0</td>
+                </tr>
+                <tr style="font-weight:600;">
+                  <td>Payoff Date (estimated)</td>
+                  <td id="tblPayoffDate">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">Based on your inputs, here is your estimated payoff timeline.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>Why Knowing Your Payoff Date Matters</h2>
+      <p>Many HELOC borrowers focus only on the monthly payment and never calculate how long it will actually take to clear the balance, or how much interest they'll pay in total. The payoff calculator above makes both of those figures visible instantly.</p>
+
+      <h3>The Danger of Interest-Only Payments</h3>
+      <p>During the draw period, most lenders only require interest-only minimum payments. This keeps payments low but means your balance never reduces. If you carry a $35,000 balance at 8.5% and only pay the monthly interest of around $248, your balance at the end of the draw period will be exactly the same as when you started — and you'll then face full amortizing payments in the repayment period on the full outstanding amount.</p>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>Repayment period payment shock</strong>
+          <p>Homeowners who make only minimum interest payments during the draw period are often caught off guard when the repayment period begins and their monthly obligation jumps significantly. Use the <a href="/calculators/heloc-payment-calculator/">HELOC Payment Calculator</a> to model what your repayment period payment would look like.</p>
+        </div>
+      </div>
+
+      <h3>How Extra Payments Help</h3>
+      <p>Even modest additional payments above the interest-only minimum can dramatically shorten your payoff timeline and reduce total interest paid. Try adjusting the monthly payment figure in the calculator above to see the impact — the difference between paying $400 and $600 per month on a $35,000 balance is often several years and thousands of dollars in interest.</p>
+
+      <h2>Next Steps</h2>
+      <p>If your payoff timeline feels too long, consider whether consolidating or refinancing makes sense. Our <a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs. Home Equity Loan Calculator</a> can help you compare a fixed-rate option that forces principal paydown from day one.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">HELOC Payoff FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              What happens if my payment is less than the monthly interest?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">If your payment equals or is less than the monthly interest charge, your balance will never go down — it may even increase. Always ensure your payment exceeds the interest-only amount by a meaningful margin to make actual progress on the principal.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Can I make lump-sum payments to pay off my HELOC faster?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Yes. Most HELOCs allow extra or lump-sum payments at any time without penalty, which directly reduces your principal balance and shortens your payoff timeline. Always check your specific loan agreement for any prepayment restrictions.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Does the payoff timeline change if my rate changes?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Yes. Because HELOCs carry variable rates, a rate increase means more of each payment goes to interest, extending your payoff timeline. Re-run this calculator if your rate changes to get an updated estimate.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/heloc-payment-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payment Calculator</a></li>
+        <li><a href="/calculators/interest-only-payment-calculator/"><i class="ti ti-arrow-right"></i> Interest-Only Calculator</a></li>
+        <li><a href="/calculators/heloc-vs-home-equity-loan/"><i class="ti ti-arrow-right"></i> HELOC vs Home Equity Loan</a></li>
+        <li><a href="/calculators/borrowing-power-calculator/"><i class="ti ti-arrow-right"></i> Borrowing Power Calculator</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+        <li><a href="/blog/"><i class="ti ti-arrow-right"></i> Learning Center</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+  <div class="author-bio">
+    <div class="author-avatar"><i class="ti ti-user" aria-hidden="true"></i></div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity. <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/what-is-a-heloc/">What is a HELOC?</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(n) {
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  function calculatePayoff() {
+    const balance = parseFloat(document.getElementById('balance').value) || 0;
+    const annualRate = parseFloat(document.getElementById('rate').value) || 0;
+    const monthlyPayment = parseFloat(document.getElementById('monthlyPayment').value) || 0;
+    const monthlyRate = (annualRate / 100) / 12;
+    const monthlyInterest = balance * monthlyRate;
+
+    if (monthlyPayment <= monthlyInterest) {
+      document.getElementById('payoffTime').textContent = '∞';
+      document.getElementById('totalInterest').textContent = 'N/A';
+      document.getElementById('tblBalance').textContent = formatCurrency(balance);
+      document.getElementById('tblPayment').textContent = formatCurrency(monthlyPayment);
+      document.getElementById('tblInterest').textContent = 'N/A';
+      document.getElementById('tblTotal').textContent = 'N/A';
+      document.getElementById('tblPayoffDate').textContent = 'Never';
+      document.getElementById('resultExplainer').textContent =
+        `Your planned payment of ${formatCurrency(monthlyPayment)}/month does not exceed the monthly interest charge of ${formatCurrency(monthlyInterest)}. Increase your monthly payment above ${formatCurrency(monthlyInterest)} to start reducing your balance.`;
+      document.getElementById('results').classList.add('visible');
+      return;
+    }
+
+    // Calculate months to payoff
+    let remaining = balance;
+    let months = 0;
+    let totalInterestPaid = 0;
+    while (remaining > 0 && months < 600) {
+      const interestCharge = remaining * monthlyRate;
+      totalInterestPaid += interestCharge;
+      remaining = remaining + interestCharge - monthlyPayment;
+      if (remaining < 0) remaining = 0;
+      months++;
+    }
+
+    const years = Math.floor(months / 12);
+    const remMonths = months % 12;
+    const payoffTimeStr = years > 0
+      ? `${years} yr${years > 1 ? 's' : ''} ${remMonths > 0 ? remMonths + ' mo' : ''}`.trim()
+      : `${months} months`;
+
+    const payoffDate = new Date();
+    payoffDate.setMonth(payoffDate.getMonth() + months);
+    const payoffDateStr = payoffDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    const totalPaid = (monthlyPayment * months) - (monthlyPayment - (balance * monthlyRate));
+
+    document.getElementById('payoffTime').textContent = payoffTimeStr;
+    document.getElementById('totalInterest').textContent = formatCurrency(totalInterestPaid);
+    document.getElementById('tblBalance').textContent = formatCurrency(balance);
+    document.getElementById('tblPayment').textContent = formatCurrency(monthlyPayment) + '/mo';
+    document.getElementById('tblInterest').textContent = formatCurrency(totalInterestPaid);
+    document.getElementById('tblTotal').textContent = formatCurrency(balance + totalInterestPaid);
+    document.getElementById('tblPayoffDate').textContent = payoffDateStr;
+    document.getElementById('resultExplainer').textContent =
+      `At ${formatCurrency(monthlyPayment)}/month on a ${formatCurrency(balance)} balance at ${annualRate}%, your HELOC will be fully paid off in approximately ${payoffTimeStr} — around ${payoffDateStr}. You'll pay a total of ${formatCurrency(totalInterestPaid)} in interest over that period.`;
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  document.addEventListener('DOMContentLoaded', calculatePayoff);
+</script>
+
+</body>
+</html>
