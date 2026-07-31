@@ -58,6 +58,13 @@
     <h1>Every HELOC Calculator<br>You'll Ever Need</h1>
     <p class="hero-sub">Plain-English tools that help US homeowners understand, compare, and plan their home equity borrowing — completely free.</p>
 
+    <div class="hero-quicklinks">
+      <a href="/calculators/heloc-payment-calculator/"><i class="ti ti-calculator" aria-hidden="true"></i> HELOC Payment</a>
+      <a href="/calculators/borrowing-power-calculator/"><i class="ti ti-home-dollar" aria-hidden="true"></i> Borrowing Power</a>
+      <a href="/calculators/ltv-calculator/"><i class="ti ti-chart-pie" aria-hidden="true"></i> LTV Calculator</a>
+      <a href="/calculators/" class="hero-quicklinks-all">View all 20+ <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+    </div>
+
     <div class="hero-stats">
       <div class="hero-stat">
         <span class="hero-stat-number">20+</span>
@@ -74,57 +81,6 @@
     </div>
   </div>
 </section>
-
-<!-- ── QUIZ ── -->
-<section class="quiz-section" id="quiz">
-  <div class="quiz-inner">
-    <p class="section-label">Not sure where to start?</p>
-    <h2>Find the Right Calculator</h2>
-    <p>Tell us what you're trying to figure out and we'll point you straight to the right tool.</p>
-
-    <div class="quiz-options">
-      <button class="quiz-btn" onclick="showResult('payment')">
-        <i class="ti ti-cash"></i>
-        <strong>What will my payments be?</strong>
-        <span>Estimate monthly costs during draw and repayment periods</span>
-      </button>
-      <button class="quiz-btn" onclick="showResult('borrow')">
-        <i class="ti ti-home-dollar"></i>
-        <strong>How much can I borrow?</strong>
-        <span>Find out your maximum HELOC credit line based on your equity</span>
-      </button>
-      <button class="quiz-btn" onclick="showResult('compare')">
-        <i class="ti ti-scale"></i>
-        <strong>HELOC vs. another option?</strong>
-        <span>Compare HELOC against home equity loan, cash-out refi, or personal loan</span>
-      </button>
-      <button class="quiz-btn" onclick="showResult('debt')">
-        <i class="ti ti-credit-card-off"></i>
-        <strong>Consolidate my debts?</strong>
-        <span>See how much you could save by rolling high-interest debt into a HELOC</span>
-      </button>
-      <button class="quiz-btn" onclick="showResult('payoff')">
-        <i class="ti ti-clock-check"></i>
-        <strong>Pay it off faster?</strong>
-        <span>Calculate payoff time and total interest at different payment levels</span>
-      </button>
-      <button class="quiz-btn" onclick="showResult('equity')">
-        <i class="ti ti-trending-up"></i>
-        <strong>Track my home equity?</strong>
-        <span>See how your equity grows through appreciation and mortgage paydown</span>
-      </button>
-    </div>
-
-    <div class="quiz-result" id="quizResult">
-      <p class="quiz-result-label">Recommended tool</p>
-      <h3 id="quizTitle"></h3>
-      <p id="quizDesc"></p>
-      <a id="quizLink" href="#">Go to Calculator <i class="ti ti-arrow-right"></i></a>
-    </div>
-  </div>
-</section>
-
-
 
 <!-- ── CORE CALCULATORS ── -->
 <section class="calc-section" style="background: var(--bg);">
@@ -278,6 +234,55 @@
         <span class="calc-card-link">Use Tool <i class="ti ti-arrow-right"></i></span>
       </a>
 
+    </div>
+  </div>
+</section>
+
+<!-- ── QUIZ ── -->
+<section class="quiz-section" id="quiz">
+  <div class="quiz-inner">
+    <p class="section-label">Still not sure which tool you need?</p>
+    <h2>Find the Right Calculator</h2>
+    <p>Tell us what you're trying to figure out and we'll point you straight to the right tool.</p>
+
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="showResult('payment')">
+        <i class="ti ti-cash"></i>
+        <strong>What will my payments be?</strong>
+        <span>Estimate monthly costs during draw and repayment periods</span>
+      </button>
+      <button class="quiz-btn" onclick="showResult('borrow')">
+        <i class="ti ti-home-dollar"></i>
+        <strong>How much can I borrow?</strong>
+        <span>Find out your maximum HELOC credit line based on your equity</span>
+      </button>
+      <button class="quiz-btn" onclick="showResult('compare')">
+        <i class="ti ti-scale"></i>
+        <strong>HELOC vs. another option?</strong>
+        <span>Compare HELOC against home equity loan, cash-out refi, or personal loan</span>
+      </button>
+      <button class="quiz-btn" onclick="showResult('debt')">
+        <i class="ti ti-credit-card-off"></i>
+        <strong>Consolidate my debts?</strong>
+        <span>See how much you could save by rolling high-interest debt into a HELOC</span>
+      </button>
+      <button class="quiz-btn" onclick="showResult('payoff')">
+        <i class="ti ti-clock-check"></i>
+        <strong>Pay it off faster?</strong>
+        <span>Calculate payoff time and total interest at different payment levels</span>
+      </button>
+      <button class="quiz-btn" onclick="showResult('equity')">
+        <i class="ti ti-trending-up"></i>
+        <strong>Track my home equity?</strong>
+        <span>See how your equity grows through appreciation and mortgage paydown</span>
+      </button>
+    </div>
+
+    <div class="quiz-result" id="quizResult">
+      <p class="quiz-result-label">Recommended tool</p>
+      <h3 id="quizTitle"></h3>
+      <p id="quizDesc"></p>
+      <a id="quizLink" href="#">Go to Calculator <i class="ti ti-arrow-right"></i></a>
     </div>
   </div>
 </section>
