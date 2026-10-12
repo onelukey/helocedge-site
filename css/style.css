@@ -317,7 +317,8 @@ footer { background: var(--navy); padding: 3rem 2rem 2rem; color: rgba(255,255,2
   .nav-links { display: none; }
   .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 62px; left: 0; right: 0; background: var(--navy); padding: 1rem 2rem 1.5rem; gap: 0.25rem; border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 99; }
   .nav-mobile-toggle { display: block; }
-  .main-wrap { grid-template-columns: 1fr; padding: 2rem 1.25rem; gap: 2rem; }
+  .main-wrap { grid-template-columns: minmax(0, 1fr); padding: 2rem 1.25rem; gap: 2rem; }
+  .main-wrap > main, .main-wrap > aside { min-width: 0; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .hero-stats { gap: 1.5rem; }
   .how-grid { grid-template-columns: 1fr; }
