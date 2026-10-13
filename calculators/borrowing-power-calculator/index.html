@@ -78,14 +78,14 @@
     <!-- ── CALCULATOR WIDGET ── -->
     <div class="calc-widget">
       <h2>How Much Can You Borrow?</h2>
-      <p class="calc-widget-sub">Enter your home value, mortgage balance, and your lender's LTV limit to find your maximum HELOC credit line.</p>
+      <p class="calc-widget-sub">Enter your home value, existing secured debts and an illustrative CLTV limit to estimate borrowing capacity.</p>
 
       <div class="field-grid">
         <div class="field">
           <label for="homeValue">Home Value <i class="ti ti-info-circle" title="Current estimated market value of your home"></i></label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="homeValue" class="with-prefix" value="450000" min="0" step="5000" />
+            <input type="number" id="homeValue" class="with-prefix" value="450000" min="1" step="any" />
           </div>
           <span class="field-hint">Use a recent appraisal or estimate</span>
         </div>
@@ -94,7 +94,7 @@
           <label for="mortgageBalance">Remaining Mortgage Balance</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="mortgageBalance" class="with-prefix" value="220000" min="0" step="5000" />
+            <input type="number" id="mortgageBalance" class="with-prefix" value="220000" min="0" step="any" />
           </div>
           <span class="field-hint">What you still owe on your primary mortgage</span>
         </div>
@@ -103,7 +103,7 @@
           <label for="otherLiens">Other Liens / 2nd Mortgages</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="otherLiens" class="with-prefix" value="0" min="0" step="1000" />
+            <input type="number" id="otherLiens" class="with-prefix" value="0" min="0" step="any" />
           </div>
           <span class="field-hint">Existing HELOC or second mortgage balance, if any</span>
         </div>
@@ -111,18 +111,19 @@
         <div class="field">
           <label for="ltvLimit">Lender LTV Limit <i class="ti ti-info-circle" title="Maximum combined loan-to-value your lender allows"></i></label>
           <div class="field-input-wrap">
-            <input type="number" id="ltvLimit" class="with-suffix" value="85" min="50" max="100" step="1" />
+            <input type="number" id="ltvLimit" class="with-suffix" value="85" min="1" max="100" step="any" />
             <span class="field-suffix">%</span>
           </div>
-          <span class="field-hint">Most lenders allow 80–90% CLTV</span>
+          <span class="field-hint">85% is illustrative; actual lender limits vary</span>
         </div>
       </div>
 
       <div class="rate-explainer">
         <i class="ti ti-info-circle"></i>
-        <span>Lenders calculate your <strong>Combined Loan-to-Value (CLTV)</strong> — all debt secured against your home, divided by its value. Most allow you to borrow up to 80–90% CLTV, though this varies by lender, credit score, and loan type.</span>
+        <span>Lenders calculate your <strong>Combined Loan-to-Value (CLTV)</strong> — all debt secured against your home, divided by its value. The 85% starting limit is only an example. Actual limits and approval depend on the lender, your finances and the property.</span>
       </div>
 
+      <p id="calcError" role="alert" aria-live="polite" style="display:none;background:#fff1f1;border:1px solid #f3b4b4;color:#991b1b;padding:12px;border-radius:8px;margin:12px 0;"></p>
       <button class="calc-btn" onclick="calculateBorrowingPower()">
         <i class="ti ti-calculator"></i> Calculate My Borrowing Power
       </button>
@@ -131,9 +132,9 @@
       <div class="results" id="results">
         <div class="results-summary">
           <div class="result-box gold">
-            <div class="result-box-label">Maximum HELOC Credit Line</div>
+            <div class="result-box-label">Estimated HELOC Borrowing Capacity</div>
             <div class="result-box-value" id="maxCreditLine">$0</div>
-            <div class="result-box-sub">Available equity you could borrow</div>
+            <div class="result-box-sub">Illustrative capacity, not an approval or offer</div>
           </div>
           <div class="result-box">
             <div class="result-box-label">Current CLTV</div>
@@ -166,7 +167,7 @@
                   <td id="tblMaxDebt">$0</td>
                 </tr>
                 <tr style="font-weight:600;">
-                  <td>Available HELOC Credit Line</td>
+                  <td>Estimated HELOC Borrowing Capacity</td>
                   <td id="tblAvailable">$0</td>
                 </tr>
               </tbody>
@@ -191,7 +192,7 @@
 
       <h3>The Formula</h3>
       <p>Lenders typically use this calculation:</p>
-      <p><strong>(Home Value × Maximum LTV%) − Existing Mortgage Balance − Other Liens = Available HELOC Credit Line</strong></p>
+      <p><strong>(Home Value × Maximum LTV%) − Existing Mortgage Balance − Other Liens = Estimated HELOC Borrowing Capacity</strong></p>
       <p>For example, on a $450,000 home with an 85% LTV limit and a $220,000 mortgage balance, the maximum combined debt allowed is $382,500. Subtracting the existing mortgage leaves $162,500 in potential HELOC credit.</p>
 
       <h3>Why Lenders Set an LTV Limit</h3>
@@ -371,36 +372,59 @@
   }
 
   function calculateBorrowingPower() {
-    const homeValue = parseFloat(document.getElementById('homeValue').value) || 0;
-    const mortgageBalance = parseFloat(document.getElementById('mortgageBalance').value) || 0;
-    const otherLiens = parseFloat(document.getElementById('otherLiens').value) || 0;
-    const ltvLimit = parseFloat(document.getElementById('ltvLimit').value) || 0;
+    const error = document.getElementById('calcError');
+    error.style.display = 'none';
+    error.textContent = '';
+
+    const read = (id, label, min, max) => {
+      const raw = document.getElementById(id).value.trim();
+      if (raw === '') throw new Error(label + ' is required.');
+      const value = Number(raw);
+      if (!Number.isFinite(value) || value < min || value > max) {
+        throw new Error(label + ' must be between ' + min.toLocaleString('en-US') +
+          ' and ' + max.toLocaleString('en-US') + '.');
+      }
+      return value;
+    };
+
+    let homeValue, mortgageBalance, otherLiens, ltvLimit;
+    try {
+      homeValue = read('homeValue', 'Home value', 1, 1000000000);
+      mortgageBalance = read('mortgageBalance', 'Mortgage balance', 0, 1000000000);
+      otherLiens = read('otherLiens', 'Other liens', 0, 1000000000);
+      ltvLimit = read('ltvLimit', 'CLTV limit', 1, 100);
+    } catch (e) {
+      error.textContent = e.message;
+      error.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
+    }
 
     const existingDebt = mortgageBalance + otherLiens;
-    const maxAllowedDebt = homeValue * (ltvLimit / 100);
-    let availableCreditLine = maxAllowedDebt - existingDebt;
-    if (availableCreditLine < 0) availableCreditLine = 0;
+    const maxAllowedDebt = homeValue * ltvLimit / 100;
+    const availableCreditLine = Math.max(0, maxAllowedDebt - existingDebt);
+    const currentCltv = existingDebt / homeValue * 100;
 
-    const currentCltv = homeValue > 0 ? (existingDebt / homeValue) * 100 : 0;
-
-    // Populate summary boxes
     document.getElementById('maxCreditLine').textContent = formatCurrency(availableCreditLine);
     document.getElementById('currentCltv').textContent = currentCltv.toFixed(1) + '%';
-
-    // Populate table
     document.getElementById('tblHomeValue').textContent = formatCurrency(homeValue);
     document.getElementById('tblExistingDebt').textContent = formatCurrency(existingDebt);
     document.getElementById('tblMaxDebt').textContent = formatCurrency(maxAllowedDebt);
     document.getElementById('tblAvailable').textContent = formatCurrency(availableCreditLine);
 
-    // Dynamic explainer
     const explainerEl = document.getElementById('resultExplainer');
     if (availableCreditLine <= 0) {
-      explainerEl.textContent = `Based on your numbers, your current debt already meets or exceeds your lender's ${ltvLimit}% LTV limit, so you may not currently qualify for additional HELOC credit. You'd need either a higher home valuation, a lower existing balance, or a lender with a higher LTV limit.`;
+      explainerEl.textContent = 'Your existing secured debt meets or exceeds the selected ' +
+        ltvLimit + '% CLTV threshold, leaving no additional capacity under this scenario. ' +
+        'This is not an eligibility or lending decision.';
     } else {
-      explainerEl.textContent = `Based on a home value of ${formatCurrency(homeValue)} and existing debt of ${formatCurrency(existingDebt)}, you could potentially access up to ${formatCurrency(availableCreditLine)} in HELOC credit at an ${ltvLimit}% LTV limit. Your current CLTV is ${currentCltv.toFixed(1)}%.`;
+      explainerEl.textContent = 'At a ' + ltvLimit + '% illustrative CLTV threshold, a ' +
+        formatCurrency(homeValue) + ' home with ' + formatCurrency(existingDebt) +
+        ' in existing secured debt has estimated additional capacity of ' +
+        formatCurrency(availableCreditLine) + '. Current CLTV: ' +
+        currentCltv.toFixed(1) + '%. This is not a guaranteed credit line; lenders also ' +
+        'consider income, credit, property requirements, fees and their own limits.';
     }
-
     document.getElementById('results').classList.add('visible');
     document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
