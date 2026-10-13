@@ -80,9 +80,17 @@
 
     <!-- ── CALCULATOR WIDGET ── -->
     <div class="calc-widget">
-      <h2>See How Much You Could Save</h2>
-      <p class="calc-widget-sub">Add your existing high-interest debts below, then compare against a single consolidated HELOC payment.</p>
+      <h2>Compare Monthly Payments and Total Costs</h2>
+      <p class="calc-widget-sub">Enter your existing debts to compare estimated monthly payments and long-term costs. A lower payment does not necessarily mean lower total costs.</p>
 
+      <div class="field" style="margin: 1rem 0;">
+        <label for="paymentMode">Existing debt payment comparison</label>
+        <select id="paymentMode" onchange="updatePaymentMode()" style="width:100%;padding:.8rem;border:1px solid #cbd5e1;border-radius:8px;background:white;">
+          <option value="estimated">Estimated payments — repay each debt over 5 years</option>
+          <option value="actual">My actual monthly payments — from statements</option>
+        </select>
+        <span class="field-hint">The 5-year estimate is a comparison assumption, not a typical credit-card minimum payment.</span>
+      </div>
       <div class="debt-row-header">
         <span>Debt Name</span>
         <span>Balance</span>
@@ -106,6 +114,10 @@
               <span class="field-suffix">%</span>
             </div>
           </div>
+          <div class="field actual-payment-field" hidden>
+            <label>Actual monthly payment ($)</label>
+            <input type="number" class="debt-actual-payment" min="0" step="0.01" placeholder="From statement" />
+          </div>
           <button class="remove-debt-btn" onclick="removeDebtRow(this)"><i class="ti ti-trash"></i></button>
         </div>
         <div class="debt-row">
@@ -124,6 +136,10 @@
               <span class="field-suffix">%</span>
             </div>
           </div>
+          <div class="field actual-payment-field" hidden>
+            <label>Actual monthly payment ($)</label>
+            <input type="number" class="debt-actual-payment" min="0" step="0.01" placeholder="From statement" />
+          </div>
           <button class="remove-debt-btn" onclick="removeDebtRow(this)"><i class="ti ti-trash"></i></button>
         </div>
       </div>
@@ -136,7 +152,7 @@
             <input type="number" id="helocRate" class="with-suffix" value="8.5" min="0" step="0.1" />
             <span class="field-suffix">%</span>
           </div>
-          <span class="field-hint">Current average variable rate</span>
+          <span class="field-hint">Illustrative annual rate — enter your own scenario</span>
         </div>
         <div class="field">
           <label for="repayTerm">Repayment Term</label>
@@ -148,9 +164,17 @@
         </div>
       </div>
 
+      <div class="field-grid" style="margin-top: 1rem;">
+        <div class="field">
+          <label for="helocFees">One-time HELOC fees ($)</label>
+          <div class="field-input-wrap"><span class="field-prefix">$</span><input type="number" id="helocFees" class="with-prefix" value="0" min="0" step="1" /></div>
+          <span class="field-hint">Fees paid separately; not added to the loan balance</span>
+        </div>
+      </div>
+      <div id="calcError" role="alert" aria-live="polite" style="display:none;color:#9b1c1c;background:#fff1f1;padding:12px;border-radius:8px;margin:12px 0;"></div>
       <div class="rate-explainer">
         <i class="ti ti-info-circle"></i>
-        <span>This calculator estimates your <strong>current</strong> minimum monthly payments using a simplified amortizing formula. Actual credit card minimum payments may differ — check your statements for exact figures.</span>
+        <span>Estimated mode assumes each existing debt is paid off in 5 years at a constant APR; this is <strong>not</strong> a credit-card minimum-payment estimate. Actual-payment mode compares monthly cash flow only because statement payments alone cannot establish future interest or payoff time. The HELOC model assumes a constant rate, immediate full amortization and no new borrowing; real HELOCs may have variable rates and interest-only draw periods.</span>
       </div>
 
       <button class="calc-btn" onclick="calculateConsolidation()">
@@ -163,7 +187,7 @@
           <div class="result-box">
             <div class="result-box-label">Current Combined Payment</div>
             <div class="result-box-value" id="currentPayment">$0</div>
-            <div class="result-box-sub">All debts, separately</div>
+            <div class="result-box-sub" id="currentPaymentNote">Estimated 5-year payments</div>
           </div>
           <div class="result-box gold">
             <div class="result-box-label">New HELOC Payment</div>
@@ -173,7 +197,7 @@
         </div>
 
         <div class="results-table-wrap">
-          <h3>Savings Breakdown</h3>
+          <h3>Payment and Cost Comparison</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -194,6 +218,9 @@
                   <td id="tblCurrentPayment">$0</td>
                   <td id="tblNewPayment">$0</td>
                 </tr>
+                <tr><td>Estimated total interest</td><td id="tblCurrentInterest">$0</td><td id="tblHelocInterest">$0</td></tr>
+                <tr><td>HELOC one-time fees</td><td>—</td><td id="tblFees">$0</td></tr>
+                <tr><td>Total repayment incl. fees</td><td id="tblCurrentTotal">$0</td><td id="tblHelocTotal">$0</td></tr>
                 <tr style="font-weight:600;">
                   <td>Monthly Savings</td>
                   <td colspan="2" id="tblMonthlySavings">$0</td>
@@ -203,6 +230,7 @@
           </div>
         </div>
 
+        <p id="costComparison" aria-live="polite" style="margin-top:1rem;font-weight:600;"></p>
         <div class="callout callout-tip" style="margin-top:1.5rem;">
           <i class="ti ti-bulb"></i>
           <div class="callout-content">
@@ -216,7 +244,7 @@
     <!-- ── ARTICLE CONTENT ── -->
     <div class="article-content">
       <h2>How Debt Consolidation With a HELOC Works</h2>
-      <p>If you're carrying multiple high-interest debts — credit cards, personal loans, or store financing — a HELOC can let you pay them all off at once and replace them with a single lower-rate payment. This works because HELOC rates are typically far below credit card APRs, which often run 18–29%.</p>
+      <p>If you're carrying multiple high-interest debts — credit cards, personal loans, or store financing — a HELOC may allow you to pay them off and replace multiple payments with one. Whether this saves money depends on your rates, fees, repayment period and future rate changes. Using home equity also turns unsecured debt into debt secured by your home.</p>
 
       <h3>Why the Savings Can Be Significant</h3>
       <p>Credit card minimum payments are structured to keep you paying interest for years. By consolidating into a HELOC at a much lower rate, more of each payment goes toward your actual balance rather than interest — which is why total savings can be substantial even if your overall payment doesn't drop dramatically.</p>
@@ -408,9 +436,14 @@
           <span class="field-suffix">%</span>
         </div>
       </div>
+          <div class="field actual-payment-field" hidden>
+            <label>Actual monthly payment ($)</label>
+            <input type="number" class="debt-actual-payment" min="0" step="0.01" placeholder="From statement" />
+          </div>
       <button class="remove-debt-btn" onclick="removeDebtRow(this)"><i class="ti ti-trash"></i></button>
     `;
     container.appendChild(row);
+    updatePaymentMode();
   }
 
   function removeDebtRow(btn) {
@@ -424,62 +457,81 @@
 <!-- ── JS: CALCULATOR ── -->
 <script>
   function formatCurrency(num) {
-    return '$' + Math.round(num).toLocaleString('en-US');
+    return (num < 0 ? '-$' : '$') + Math.abs(num).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   }
-
   function amortizedPayment(principal, annualRate, years) {
-    const monthlyRate = (annualRate / 100) / 12;
-    const months = years * 12;
-    if (principal <= 0) return 0;
-    if (monthlyRate === 0) return principal / months;
-    return principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+    const n = years * 12;
+    if (principal === 0) return 0;
+    const r = annualRate / 1200;
+    if (r === 0) return principal / n;
+    return principal * r / (1 - Math.pow(1 + r, -n));
   }
-
-  function calculateConsolidation() {
-    const rows = document.querySelectorAll('#debtRows .debt-row');
-    let totalBalance = 0;
-    let currentTotalPayment = 0;
-
-    rows.forEach(row => {
-      const balance = parseFloat(row.querySelector('.debt-balance').value) || 0;
-      const rate = parseFloat(row.querySelector('.debt-rate').value) || 0;
-      totalBalance += balance;
-      // Estimate current payment using a 5-year payoff assumption (typical for revolving debt minimums)
-      currentTotalPayment += amortizedPayment(balance, rate, 5);
+  function updatePaymentMode() {
+    const actual = document.getElementById('paymentMode').value === 'actual';
+    document.querySelectorAll('.actual-payment-field').forEach(el => {
+      el.hidden = !actual;
+      el.style.display = actual ? 'block' : 'none';
     });
-
-    const helocRate = parseFloat(document.getElementById('helocRate').value) || 0;
-    const repayTerm = parseFloat(document.getElementById('repayTerm').value) || 1;
-
-    const newPayment = amortizedPayment(totalBalance, helocRate, repayTerm);
-    const monthlySavings = currentTotalPayment - newPayment;
-
-    // Populate summary boxes
-    document.getElementById('currentPayment').textContent = formatCurrency(currentTotalPayment);
-    document.getElementById('newPayment').textContent = formatCurrency(newPayment);
-
-    // Populate table
-    document.getElementById('tblTotalBalance').textContent = formatCurrency(totalBalance);
-    document.getElementById('tblHelocBalance').textContent = formatCurrency(totalBalance);
-    document.getElementById('tblCurrentPayment').textContent = formatCurrency(currentTotalPayment);
-    document.getElementById('tblNewPayment').textContent = formatCurrency(newPayment);
-    document.getElementById('tblMonthlySavings').textContent = (monthlySavings >= 0 ? formatCurrency(monthlySavings) + ' saved/mo' : formatCurrency(Math.abs(monthlySavings)) + ' more/mo');
-
-    // Dynamic explainer
-    const explainerEl = document.getElementById('resultExplainer');
-    if (monthlySavings > 0) {
-      explainerEl.textContent = `Consolidating ${formatCurrency(totalBalance)} of debt into a HELOC at ${helocRate}% could save you approximately ${formatCurrency(monthlySavings)} per month compared to your current estimated payments, assuming a ${repayTerm}-year repayment term.`;
-    } else {
-      explainerEl.textContent = `Based on your numbers, consolidating into a HELOC over ${repayTerm} years wouldn't lower your monthly payment — try a longer repayment term, or check whether a shorter term reduces your total interest instead, since consolidation isn't always about a lower monthly figure.`;
-    }
-
-    document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
-
-  // Calculate on load with default values
-  document.addEventListener('DOMContentLoaded', calculateConsolidation);
+  function calculateConsolidation() {
+    const error = document.getElementById('calcError');
+    error.style.display = 'none';
+    const fail = message => { error.textContent = message; error.style.display = 'block'; document.getElementById('results').classList.remove('visible'); return false; };
+    const validNumber = (el, label, max) => {
+      if (!el || el.value.trim() === '' || !Number.isFinite(el.valueAsNumber) || el.valueAsNumber < 0 || el.valueAsNumber > max) throw new Error(label + ' must be between 0 and ' + max.toLocaleString() + '.');
+      return el.valueAsNumber;
+    };
+    try {
+      const actualMode = document.getElementById('paymentMode').value === 'actual';
+      let balance = 0, currentPayment = 0, currentInterest = 0;
+      const rows = [...document.querySelectorAll('#debtRows .debt-row')];
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i], label = 'Debt ' + (i + 1);
+        const amount = validNumber(row.querySelector('.debt-balance'), label + ' balance', 100000000);
+        const rate = validNumber(row.querySelector('.debt-rate'), label + ' APR', 100);
+        balance += amount;
+        if (actualMode) {
+          currentPayment += validNumber(row.querySelector('.debt-actual-payment'), label + ' actual payment', 10000000);
+        } else {
+          const payment = amortizedPayment(amount, rate, 5);
+          currentPayment += payment;
+          currentInterest += payment * 60 - amount;
+        }
+      }
+      if (balance <= 0) return fail('Enter at least one debt with a positive balance.');
+      const rate = validNumber(document.getElementById('helocRate'), 'HELOC APR', 100);
+      const years = validNumber(document.getElementById('repayTerm'), 'HELOC repayment term', 30);
+      if (years < 1 || !Number.isInteger(years)) return fail('HELOC repayment term must be a whole number from 1 to 30 years.');
+      const fees = validNumber(document.getElementById('helocFees'), 'HELOC fees', 10000000);
+      const payment = amortizedPayment(balance, rate, years);
+      const helocInterest = Math.max(0, payment * years * 12 - balance);
+      const helocTotal = balance + helocInterest + fees;
+      const difference = currentPayment - payment;
+      const set = (id, value) => document.getElementById(id).textContent = value;
+      set('currentPayment', formatCurrency(currentPayment));
+      set('newPayment', formatCurrency(payment));
+      set('currentPaymentNote', actualMode ? 'From your stated monthly payments' : 'Estimated 5-year payoff per debt');
+      set('tblTotalBalance', formatCurrency(balance));
+      set('tblHelocBalance', formatCurrency(balance));
+      set('tblCurrentPayment', formatCurrency(currentPayment));
+      set('tblNewPayment', formatCurrency(payment));
+      set('tblMonthlySavings', difference >= 0 ? formatCurrency(difference) + ' less per month' : formatCurrency(-difference) + ' more per month');
+      set('tblCurrentInterest', actualMode ? 'Not estimable from payments alone' : formatCurrency(currentInterest));
+      set('tblHelocInterest', formatCurrency(helocInterest));
+      set('tblFees', formatCurrency(fees));
+      set('tblCurrentTotal', actualMode ? 'Not estimable' : formatCurrency(balance + currentInterest));
+      set('tblHelocTotal', formatCurrency(helocTotal));
+      if (actualMode) {
+        set('costComparison', 'Total cost comparison unavailable in actual-payment mode: payment amounts alone do not tell us when existing debts will be paid off.');
+      } else {
+        const costDifference = helocTotal - (balance + currentInterest);
+        set('costComparison', 'Estimated HELOC total cost is ' + formatCurrency(Math.abs(costDifference)) + (costDifference > 0.005 ? ' higher' : costDifference < -0.005 ? ' lower' : ' approximately equal') + ' than the modelled 5-year existing-debt payoff, including HELOC fees.');
+      }
+      set('resultExplainer', 'Your modelled HELOC payment is ' + formatCurrency(payment) + ' per month over ' + years + ' years at a constant ' + rate + '% APR, with ' + formatCurrency(fees) + ' in separately paid fees. ' + (difference >= 0 ? 'That is ' + formatCurrency(difference) + ' less' : 'That is ' + formatCurrency(-difference) + ' more') + ' per month than ' + (actualMode ? 'the actual payments you entered.' : 'estimated 5-year existing-debt payments.') + ' Lower monthly payments do not necessarily mean lower total costs. A HELOC uses your home as collateral; failure to repay could put it at risk.');
+      document.getElementById('results').classList.add('visible');
+    } catch (e) { return fail(e.message); }
+  }
+  document.addEventListener('DOMContentLoaded', () => { updatePaymentMode(); calculateConsolidation(); });
 </script>
-
 </body>
 </html>
