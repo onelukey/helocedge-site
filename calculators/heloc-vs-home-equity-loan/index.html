@@ -86,7 +86,7 @@
           <label for="loanAmount">Amount You Want to Borrow</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="loanAmount" class="with-prefix" value="50000" min="0" step="1000" />
+            <input type="number" id="loanAmount" class="with-prefix" value="50000" min="1" step="any" />
           </div>
           <span class="field-hint">Lump sum or planned total draw</span>
         </div>
@@ -101,29 +101,30 @@
         </div>
 
         <div class="field">
-          <label for="helocRate">HELOC Rate (Variable) <i class="ti ti-info-circle" title="Typically lower starting rate but can change"></i></label>
+          <label for="helocRate">HELOC Rate (Variable) <i class="ti ti-info-circle" title="Variable rate can change over time"></i></label>
           <div class="field-input-wrap">
             <input type="number" id="helocRate" class="with-suffix" value="8.5" min="0" step="0.1" />
             <span class="field-suffix">%</span>
           </div>
-          <span class="field-hint">Current average variable rate</span>
+          <span class="field-hint">Illustrative rate — enter your lender’s quoted rate</span>
         </div>
 
         <div class="field">
-          <label for="helRate">Home Equity Loan Rate (Fixed) <i class="ti ti-info-circle" title="Usually slightly higher but locked for the full term"></i></label>
+          <label for="helRate">Home Equity Loan Rate (Fixed) <i class="ti ti-info-circle" title="Fixed rate for the agreed term"></i></label>
           <div class="field-input-wrap">
             <input type="number" id="helRate" class="with-suffix" value="8.9" min="0" step="0.1" />
             <span class="field-suffix">%</span>
           </div>
-          <span class="field-hint">Current average fixed rate</span>
+          <span class="field-hint">Illustrative rate — enter your lender’s quoted rate</span>
         </div>
       </div>
 
       <div class="rate-explainer">
         <i class="ti ti-info-circle"></i>
-        <span>This comparison assumes the full HELOC amount is drawn immediately and repaid like a standard loan. In practice, HELOCs are usually drawn gradually — use the <a href="/calculators/heloc-payment-calculator/">HELOC Payment Calculator</a> for a draw + repayment breakdown.</span>
+        <span>This simplified comparison assumes the full HELOC amount is drawn immediately, with both options repaid in equal monthly principal-and-interest payments over the same term at the rates entered. It holds the HELOC rate constant and excludes fees. Actual HELOCs may have interest-only draw periods, additional draws and changing rates. For a draw + repayment breakdown, use the <a href="/calculators/heloc-payment-calculator/">HELOC Payment Calculator</a> for a draw + repayment breakdown.</span>
       </div>
 
+      <p id="calcError" role="alert" aria-live="polite" style="display:none;background:#fff1f1;border:1px solid #f3b4b4;color:#991b1b;padding:12px;border-radius:8px;margin:12px 0;"></p>
       <button class="calc-btn" onclick="compareLoans()">
         <i class="ti ti-calculator"></i> Compare My Options
       </button>
@@ -144,7 +145,7 @@
         </div>
 
         <div class="results-table-wrap">
-          <h3>Full Comparison</h3>
+          <h3>Illustrative Payment and Interest Comparison</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -405,50 +406,88 @@
 <!-- ── JS: CALCULATOR ── -->
 <script>
   function formatCurrency(num) {
-    return '$' + Math.round(num).toLocaleString('en-US');
+    return '$' + Number(num).toLocaleString('en-US', {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    });
   }
 
   function amortizedPayment(principal, annualRate, years) {
-    const monthlyRate = (annualRate / 100) / 12;
+    const monthlyRate = annualRate / 1200;
     const months = years * 12;
     if (monthlyRate === 0) return principal / months;
-    return principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+    return principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
   }
 
   function compareLoans() {
-    const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
-    const repayTerm = parseFloat(document.getElementById('repayTerm').value) || 1;
-    const helocRate = parseFloat(document.getElementById('helocRate').value) || 0;
-    const helRate = parseFloat(document.getElementById('helRate').value) || 0;
+    const error = document.getElementById('calcError');
+    error.textContent = '';
+    error.style.display = 'none';
+
+    function read(id, label, min, max, integerOnly) {
+      const raw = document.getElementById(id).value.trim();
+      if (raw === '') throw new Error(label + ' is required.');
+      const value = Number(raw);
+      if (!Number.isFinite(value) || value < min || value > max ||
+          (integerOnly && !Number.isInteger(value))) {
+        throw new Error(label + ' must be ' +
+          (integerOnly ? 'a whole number ' : '') +
+          'between ' + min.toLocaleString('en-US') + ' and ' +
+          max.toLocaleString('en-US') + '.');
+      }
+      return value;
+    }
+
+    let loanAmount, repayTerm, helocRate, helRate;
+    try {
+      loanAmount = read('loanAmount', 'Loan amount', 1, 100000000, false);
+      repayTerm = read('repayTerm', 'Repayment term', 1, 30, true);
+      helocRate = read('helocRate', 'HELOC rate', 0, 100, false);
+      helRate = read('helRate', 'Home equity loan rate', 0, 100, false);
+    } catch (err) {
+      error.textContent = err.message;
+      error.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
+    }
 
     const months = repayTerm * 12;
-
     const helocPayment = amortizedPayment(loanAmount, helocRate, repayTerm);
     const helPayment = amortizedPayment(loanAmount, helRate, repayTerm);
-
     const helocTotal = helocPayment * months;
     const helTotal = helPayment * months;
+    const helocInterest = Math.max(0, helocTotal - loanAmount);
+    const helInterest = Math.max(0, helTotal - loanAmount);
 
-    const helocInterest = helocTotal - loanAmount;
-    const helInterest = helTotal - loanAmount;
+    const values = {
+      helocPayment: helocPayment,
+      helPayment: helPayment,
+      tblHelocPayment: helocPayment,
+      tblHelPayment: helPayment,
+      tblHelocInterest: helocInterest,
+      tblHelInterest: helInterest,
+      tblHelocTotal: helocTotal,
+      tblHelTotal: helTotal
+    };
+    Object.entries(values).forEach(([id, value]) => {
+      document.getElementById(id).textContent = formatCurrency(value);
+    });
 
-    // Populate summary boxes
-    document.getElementById('helocPayment').textContent = formatCurrency(helocPayment);
-    document.getElementById('helPayment').textContent = formatCurrency(helPayment);
-
-    // Populate table
-    document.getElementById('tblHelocPayment').textContent = formatCurrency(helocPayment);
-    document.getElementById('tblHelPayment').textContent = formatCurrency(helPayment);
-    document.getElementById('tblHelocInterest').textContent = formatCurrency(helocInterest);
-    document.getElementById('tblHelInterest').textContent = formatCurrency(helInterest);
-    document.getElementById('tblHelocTotal').textContent = formatCurrency(helocTotal);
-    document.getElementById('tblHelTotal').textContent = formatCurrency(helTotal);
-
-    // Dynamic explainer
     const diff = Math.abs(helocTotal - helTotal);
-    const cheaper = helocTotal < helTotal ? 'the HELOC' : 'the home equity loan';
+    const tolerance = 0.005;
+    let comparison;
+    if (diff < tolerance) {
+      comparison = 'Both options have approximately equal modelled total repayments at the rates entered.';
+    } else {
+      const lower = helocTotal < helTotal ? 'HELOC' : 'home equity loan';
+      comparison = 'The ' + lower + ' has approximately ' + formatCurrency(diff) +
+        ' lower modelled total repayments over ' + repayTerm + ' years.';
+    }
     document.getElementById('resultExplainer').textContent =
-      `At today's rates, ${cheaper} costs approximately ${formatCurrency(diff)} less over ${repayTerm} years — but remember the HELOC rate is variable and could rise, while the home equity loan rate is locked for the full term. Factor in your tolerance for payment changes, not just today's numbers.`;
+      comparison + ' This comparison uses the rates you entered, assumes immediate full ' +
+      'borrowing and equal monthly principal-and-interest repayments, and excludes fees. ' +
+      'The HELOC rate is held constant for illustration but may change in practice. ' +
+      'A home equity loan generally has a fixed rate for its agreed term. ' +
+      'Neither result is a lender quote or recommendation.';
 
     document.getElementById('results').classList.add('visible');
     document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
