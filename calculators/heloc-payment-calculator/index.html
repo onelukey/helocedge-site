@@ -1,4 +1,4 @@
-placeholder<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -120,9 +120,10 @@ placeholder<!DOCTYPE html>
 
       <div class="rate-explainer">
         <i class="ti ti-info-circle"></i>
-        <span>Most HELOCs carry a <strong>variable interest rate</strong> tied to the U.S. prime rate, meaning your payment can rise or fall over time. Check the current average via <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac's published rates</a> before entering your figure.</span>
+        <span>Most HELOCs carry a <strong>variable interest rate</strong> tied to the U.S. prime rate, meaning your payment can rise or fall over time. Enter the rate from your lender or loan disclosure. This estimator holds that rate constant; it does not predict future HELOC rates.</span>
       </div>
 
+      <p id="calcError" role="alert" aria-live="polite" style="display:none;color:#9b1c1c;background:#fff1f1;border:1px solid #f4b6b6;border-radius:8px;padding:12px;margin:12px 0;"></p>
       <button class="calc-btn" onclick="calculatePayments()">
         <i class="ti ti-calculator"></i> Calculate My Payments
       </button>
@@ -143,7 +144,7 @@ placeholder<!DOCTYPE html>
         </div>
 
         <div class="results-table-wrap">
-          <h3>Lifetime Cost Summary</h3>
+          <h3>Illustrative Lifetime Payment Summary</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -178,6 +179,14 @@ placeholder<!DOCTYPE html>
           </div>
         </div>
 
+        <div class="callout callout-tip" style="margin-top:1rem;">
+          <i class="ti ti-info-circle"></i>
+          <div class="callout-content">
+            <strong>Principal and interest breakdown</strong>
+            <p id="costBreakdown"></p>
+            <p>Assumes the full balance remains outstanding throughout the interest-only draw period, no new draws or principal repayments, a constant rate, and full amortization during repayment. Excludes fees and taxes. Actual HELOC terms may differ.</p>
+          </div>
+        </div>
         <div class="callout callout-tip" style="margin-top:1.5rem;">
           <i class="ti ti-bulb"></i>
           <div class="callout-content">
@@ -197,7 +206,7 @@ placeholder<!DOCTYPE html>
       <p>This is typically the first 10 years of your HELOC. You can borrow, repay, and borrow again up to your credit limit — much like a credit card. During this phase, most lenders only require <strong>interest-only payments</strong> on whatever balance you've drawn. This keeps payments low, but your principal balance doesn't reduce unless you choose to pay more.</p>
 
       <h3>The Repayment Period</h3>
-      <p>Once the draw period ends, you can no longer borrow against the line. Instead, you enter a repayment period — typically 15 to 20 years — where you pay back both principal and interest, similar to a standard mortgage. This is where many homeowners are caught off guard: the jump from interest-only to full amortizing payments can mean your monthly payment increases substantially.</p>
+      <p>Once the draw period ends, you can no longer borrow against the line. Instead, you enter a repayment period — typically 15 to 20 years — where you pay back both principal and interest, similar to a standard mortgage. Depending on the balance, rate and repayment term, the payment may increase substantially when principal repayment begins.</p>
 
       <div class="callout callout-warning">
         <i class="ti ti-alert-triangle"></i>
@@ -234,7 +243,7 @@ placeholder<!DOCTYPE html>
               Why does my payment jump so much in the repayment period?
               <i class="ti ti-plus"></i>
             </button>
-            <div class="faq-a">Because you switch from interest-only payments to full amortizing payments that include both principal and interest. If you only made minimum payments during the draw period, the jump can be significant — sometimes doubling or more.</div>
+            <div class="faq-a">Because you switch from interest-only payments to full amortizing payments that include both principal and interest. If you only made minimum payments during the draw period, the payment may increase substantially, depending on the rate and repayment term.</div>
           </div>
 
           <div class="faq-item">
@@ -367,60 +376,78 @@ placeholder<!DOCTYPE html>
 <!-- ── JS: CALCULATOR ── -->
 <script>
   function formatCurrency(num) {
-    return '$' + Math.round(num).toLocaleString('en-US');
+    return '$' + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   }
-
   function calculatePayments() {
-    const balance = parseFloat(document.getElementById('balance').value) || 0;
-    const annualRate = parseFloat(document.getElementById('rate').value) || 0;
-    const drawYears = parseFloat(document.getElementById('drawYears').value) || 0;
-    const repayYears = parseFloat(document.getElementById('repayYears').value) || 0;
-
-    const monthlyRate = (annualRate / 100) / 12;
-
-    // Draw period: interest-only payment
-    const drawPayment = balance * monthlyRate;
-    const drawMonths = drawYears * 12;
-    const drawTotal = drawPayment * drawMonths;
-
-    // Repayment period: standard amortizing payment on remaining balance
-    const repayMonths = repayYears * 12;
-    let repayPayment;
-    if (monthlyRate > 0) {
-      repayPayment = balance * (monthlyRate * Math.pow(1 + monthlyRate, repayMonths)) / (Math.pow(1 + monthlyRate, repayMonths) - 1);
-    } else {
-      repayPayment = balance / repayMonths;
+    const error = document.getElementById('calcError');
+    error.style.display = 'none';
+    error.textContent = '';
+    const read = (id, label, min, max, integer = false) => {
+      const raw = document.getElementById(id).value.trim();
+      if (raw === '') throw new Error(label + ' is required.');
+      const value = Number(raw);
+      if (!Number.isFinite(value) || value < min || value > max ||
+          (integer && !Number.isInteger(value))) {
+        throw new Error(label + ' must be ' + (integer ? 'a whole number ' : '') +
+          'between ' + min + ' and ' + max + '.');
+      }
+      return value;
+    };
+    let balance, annualRate, drawYears, repayYears;
+    try {
+      balance = read('balance', 'HELOC balance', 0, 100000000);
+      annualRate = read('rate', 'Interest rate', 0, 100);
+      drawYears = read('drawYears', 'Draw period', 1, 20, true);
+      repayYears = read('repayYears', 'Repayment period', 1, 30, true);
+    } catch (err) {
+      error.textContent = err.message;
+      error.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
     }
+    const r = annualRate / 1200;
+    const drawMonths = drawYears * 12;
+    const repayMonths = repayYears * 12;
+    const drawPayment = balance * r;
+    const drawTotal = drawPayment * drawMonths;
+    const repayPayment = r === 0 ? balance / repayMonths :
+      balance * r / (1 - Math.pow(1 + r, -repayMonths));
     const repayTotal = repayPayment * repayMonths;
-
     const grandTotal = drawTotal + repayTotal;
-    const totalYears = drawYears + repayYears;
-
-    // Populate summary boxes
-    document.getElementById('drawPayment').textContent = formatCurrency(drawPayment);
-    document.getElementById('repayPayment').textContent = formatCurrency(repayPayment);
-
-    // Populate table
-    document.getElementById('tblDrawPayment').textContent = formatCurrency(drawPayment);
-    document.getElementById('tblDrawYears').textContent = drawYears + ' yrs';
-    document.getElementById('tblDrawTotal').textContent = formatCurrency(drawTotal);
-
-    document.getElementById('tblRepayPayment').textContent = formatCurrency(repayPayment);
-    document.getElementById('tblRepayYears').textContent = repayYears + ' yrs';
-    document.getElementById('tblRepayTotal').textContent = formatCurrency(repayTotal);
-
-    document.getElementById('tblTotalYears').textContent = totalYears + ' yrs';
-    document.getElementById('tblGrandTotal').textContent = formatCurrency(grandTotal);
-
-    // Dynamic explainer
-    const increase = repayPayment - drawPayment;
-    const increasePct = drawPayment > 0 ? Math.round((increase / drawPayment) * 100) : 0;
+    const totalInterest = Math.max(0, grandTotal - balance);
+    const values = {
+      drawPayment: formatCurrency(drawPayment),
+      repayPayment: formatCurrency(repayPayment),
+      tblDrawPayment: formatCurrency(drawPayment),
+      tblDrawYears: drawYears + ' yrs',
+      tblDrawTotal: formatCurrency(drawTotal),
+      tblRepayPayment: formatCurrency(repayPayment),
+      tblRepayYears: repayYears + ' yrs',
+      tblRepayTotal: formatCurrency(repayTotal),
+      tblTotalYears: (drawYears + repayYears) + ' yrs',
+      tblGrandTotal: formatCurrency(grandTotal)
+    };
+    Object.entries(values).forEach(([id, value]) => {
+      document.getElementById(id).textContent = value;
+    });
+    document.getElementById('costBreakdown').textContent =
+      'Estimated total payments: ' + formatCurrency(grandTotal) +
+      '. Of that, ' + formatCurrency(balance) + ' repays principal and ' +
+      formatCurrency(totalInterest) + ' is interest (' +
+      formatCurrency(drawTotal) + ' during the draw period and ' +
+      formatCurrency(Math.max(0, repayTotal - balance)) + ' during repayment).';
+    const difference = repayPayment - drawPayment;
+    const change = Math.abs(difference) < 0.005 ?
+      'Payments are approximately equal in both phases.' :
+      'The monthly payment ' + (difference > 0 ? 'increases' : 'decreases') +
+      ' by ' + formatCurrency(Math.abs(difference)) + ' when repayment begins.';
     document.getElementById('resultExplainer').textContent =
-      `During your ${drawYears}-year draw period, you'd pay interest-only at roughly ${formatCurrency(drawPayment)}/month. ` +
-      `Once repayment begins, your payment rises to approximately ${formatCurrency(repayPayment)}/month — about a ${increasePct}% increase — as you start paying down principal alongside interest.`;
-
+      'At a constant ' + annualRate + '% annual rate, the ' + drawYears +
+      '-year interest-only draw payment is approximately ' + formatCurrency(drawPayment) +
+      ' per month. During the following ' + repayYears +
+      '-year repayment period, the estimated principal-and-interest payment is ' +
+      formatCurrency(repayPayment) + ' per month. ' + change;
     document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // Calculate on load with default values
