@@ -90,7 +90,7 @@
     <!-- ── CALCULATOR WIDGET ── -->
     <div class="calc-widget">
       <h2>See How Your Equity Grows Over Time</h2>
-      <p class="calc-widget-sub">Enter your home details to track equity building through mortgage paydown and appreciation — and see when you hit key HELOC eligibility thresholds.</p>
+      <p class="calc-widget-sub">Enter your home details to track equity building through mortgage paydown and appreciation — and explore illustrative loan-to-value milestones.</p>
 
       <div class="field-grid">
         <div class="field">
@@ -130,12 +130,12 @@
         </div>
 
         <div class="field">
-          <label for="appreciation">Annual Appreciation Rate <i class="ti ti-info-circle" title="Long-term US average is around 3-4%"></i></label>
+          <label for="appreciation">Annual Appreciation Rate <i class="ti ti-info-circle" title="Home values can rise or fall"></i></label>
           <div class="field-input-wrap">
-            <input type="number" id="appreciation" class="with-suffix" value="3" min="0" step="0.5" />
+            <input type="number" id="appreciation" class="with-suffix" value="3" min="-100" max="100" step="0.5" />
             <span class="field-suffix">%</span>
           </div>
-          <span class="field-hint">Long-term US average is ~3–4%</span>
+          <span class="field-hint">Scenario assumption; negative values model declines</span>
         </div>
 
         <div class="field">
@@ -148,6 +148,7 @@
         </div>
       </div>
 
+      <div id="equityError" role="alert" aria-live="polite" style="display:none;margin:0 0 1rem;padding:0.85rem 1rem;border:1px solid #e7a3a3;background:#fff2f2;color:#842525;border-radius:8px;"></div>
       <button class="calc-btn" onclick="trackEquity()">
         <i class="ti ti-trending-up"></i> Track My Equity
       </button>
@@ -167,6 +168,7 @@
           </div>
         </div>
 
+        <p id="equityWarning" role="status" aria-live="polite" style="display:none;margin:1rem 0;padding:0.85rem 1rem;border:1px solid #e5cc86;background:#fff9e9;border-radius:8px;"></p>
         <!-- Year-by-year bar chart -->
         <div class="results-table-wrap">
           <h3>Equity Build-Up — Year by Year</h3>
@@ -175,7 +177,7 @@
 
         <!-- HELOC milestones -->
         <div class="results-table-wrap" style="margin-top:1.5rem;">
-          <h3>HELOC Eligibility Milestones</h3>
+          <h3>Illustrative Equity Milestones</h3>
           <div id="milestones"></div>
         </div>
 
@@ -192,21 +194,21 @@
     <!-- ── ARTICLE CONTENT ── -->
     <div class="article-content">
       <h2>What Builds Your Home Equity?</h2>
-      <p>Home equity grows from two sources working simultaneously: <strong>mortgage paydown</strong> (each payment reduces your principal balance) and <strong>home appreciation</strong> (your property's market value increasing over time). In the early years of a mortgage, most of your payment covers interest rather than principal, so appreciation often contributes more to equity growth than your monthly payments do.</p>
+      <p>Home equity can change through two main factors: <strong>mortgage paydown</strong> (principal payments reduce your loan balance) and <strong>changes in home value</strong> (which can increase or decrease). Early in many amortizing mortgages, a larger share of each payment goes toward interest. The actual mix depends on the loan terms and payment amount.</p>
 
       <h3>Why Equity Matters for a HELOC</h3>
-      <p>Your equity position directly determines how much you can borrow via a HELOC. Most lenders allow you to access up to 80–85% of your home's value, minus what you owe on the mortgage. The higher your equity, the larger the credit line available to you. Use the <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a> to find your exact maximum based on today's numbers.</p>
+      <p>Your equity position directly determines how much you can borrow via a HELOC. Some lenders use combined loan-to-value limits around 80–85%, but limits and underwriting requirements vary. The higher your equity, the larger the credit line available to you. Use the <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a> to explore an illustrative credit-line estimate.</p>
 
       <div class="callout callout-warning">
         <i class="ti ti-alert-triangle"></i>
         <div class="callout-content">
           <strong>Appreciation is not guaranteed</strong>
-          <p>This tool projects equity using a consistent appreciation rate. In reality, home values fluctuate and can decline. The long-term US average of 3–4% is a reasonable planning assumption, but your specific market may differ significantly.</p>
+          <p>This tool projects equity using a consistent appreciation rate. In reality, home values fluctuate and can decline. The default 3% is an example, not a forecast. Try 0% or a negative rate to explore other scenarios.</p>
         </div>
       </div>
 
       <h2>Next Steps</h2>
-      <p>Once you know your current and projected equity, see exactly how much you could borrow today with the <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a>, or check your current LTV ratio with the <a href="/calculators/ltv-calculator/">LTV Calculator</a>.</p>
+      <p>Once you know your current and projected equity, estimate how much you might be able to borrow today with the <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a>, or check your current LTV ratio with the <a href="/calculators/ltv-calculator/">LTV Calculator</a>.</p>
     </div>
 
     <!-- ── FAQ ── -->
@@ -221,7 +223,7 @@
               What appreciation rate should I use?
               <i class="ti ti-plus"></i>
             </button>
-            <div class="faq-a">The long-term US national average is approximately 3–4% per year, though this varies widely by location. High-demand urban areas have historically appreciated faster; rural or declining markets may appreciate more slowly or even lose value.</div>
+            <div class="faq-a">There is no reliable appreciation rate for every home or location. The default 3% is illustrative, not a prediction. Try 0% and negative values to see how outcomes change.</div>
           </div>
 
           <div class="faq-item">
@@ -229,7 +231,7 @@
               Does renovating my home increase my HELOC borrowing power?
               <i class="ti ti-plus"></i>
             </button>
-            <div class="faq-a">Yes, if the renovation increases your home's appraised value. Since lenders base HELOC limits on the appraised value, improvements that raise that figure directly increase your potential credit line. Kitchens, bathrooms, and energy upgrades typically offer the best return on investment.</div>
+            <div class="faq-a">Possibly. A renovation may increase your home's appraised value, but the cost of the work does not necessarily equal the increase in value. Any additional HELOC borrowing capacity depends on the lender's valuation and underwriting rules.</div>
           </div>
 
           <div class="faq-item">
@@ -365,92 +367,110 @@
   }
 
   function trackEquity() {
-    const homeValue = parseFloat(document.getElementById('homeValue').value) || 0;
-    const mortgageBalance = parseFloat(document.getElementById('mortgageBalance').value) || 0;
-    const mortgageRate = parseFloat(document.getElementById('mortgageRate').value) || 0;
-    const monthlyPayment = parseFloat(document.getElementById('monthlyPayment').value) || 0;
-    const appreciation = parseFloat(document.getElementById('appreciation').value) || 0;
-    const trackYears = parseInt(document.getElementById('trackYears').value) || 10;
+    const ids = ['homeValue', 'mortgageBalance', 'mortgageRate', 'monthlyPayment', 'appreciation', 'trackYears'];
+    const inputs = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+    const errorEl = document.getElementById('equityError');
+    const warningEl = document.getElementById('equityWarning');
+    errorEl.style.display = 'none';
+    warningEl.style.display = 'none';
+    const values = {};
+    for (const id of ids) {
+      const raw = inputs[id].value.trim();
+      const value = Number(raw);
+      if (!raw || !Number.isFinite(value)) {
+        errorEl.textContent = 'Please enter a valid number in every field.';
+        errorEl.style.display = 'block';
+        document.getElementById('results').classList.remove('visible');
+        return;
+      }
+      values[id] = value;
+    }
+    const {homeValue, mortgageBalance, mortgageRate, monthlyPayment, appreciation, trackYears} = values;
+    if (homeValue <= 0 || mortgageBalance < 0 || mortgageRate < 0 || mortgageRate > 100 ||
+        monthlyPayment < 0 || appreciation < -100 || appreciation > 100 ||
+        !Number.isInteger(trackYears) || trackYears < 1 || trackYears > 30) {
+      errorEl.textContent = 'Use a home value above $0, nonnegative balances/payments, rates between 0–100%, appreciation between -100% and 100%, and whole projection years from 1–30.';
+      errorEl.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
+    }
 
-    const monthlyRate = (mortgageRate / 100) / 12;
+    const monthlyRate = mortgageRate / 1200;
     const annualAppreciation = appreciation / 100;
-
-    // Current equity
     const equityNow = homeValue - mortgageBalance;
-    const ltvNow = homeValue > 0 ? (mortgageBalance / homeValue) * 100 : 0;
-
-    // Project year by year
+    const ltvNow = mortgageBalance / homeValue * 100;
     let balance = mortgageBalance;
     let value = homeValue;
+    let insufficientMonths = 0;
     const yearData = [];
 
     for (let y = 0; y <= trackYears; y++) {
-      const equity = value - Math.max(balance, 0);
-      const ltv = value > 0 ? (Math.max(balance, 0) / value) * 100 : 0;
-      yearData.push({ year: y, value, balance: Math.max(balance, 0), equity, ltv });
-
-      // Advance one year
-      value = value * (1 + annualAppreciation);
+      const equity = value - balance;
+      const ltv = value > 0 ? balance / value * 100 : (balance > 0 ? Infinity : 0);
+      yearData.push({year: y, value, balance, equity, ltv});
+      if (y === trackYears) break;
+      value *= 1 + annualAppreciation;
       for (let m = 0; m < 12; m++) {
+        if (balance <= 0) break;
         const interest = balance * monthlyRate;
-        const principal = Math.min(monthlyPayment - interest, balance);
-        balance = Math.max(balance - principal, 0);
+        if (monthlyPayment + 1e-8 < interest) insufficientMonths++;
+        // Illustrative negative amortization: unpaid interest is added to balance.
+        balance = Math.max(0, balance + interest - monthlyPayment);
       }
     }
 
     const futureData = yearData[trackYears];
+    if (!Number.isFinite(futureData.balance) || !Number.isFinite(futureData.equity)) {
+      errorEl.textContent = 'These inputs produce values too large to project. Please use a shorter period or more moderate assumptions.';
+      errorEl.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
+    }
+    const warnings = [];
+    if (insufficientMonths) warnings.push(`In ${insufficientMonths} projected month(s), the payment is below the interest charged. This model adds unpaid interest to the balance (negative amortization). Your mortgage may not permit this; check your loan terms.`);
+    if (appreciation < 0) warnings.push('This scenario assumes declining home values. Equity can become negative.');
+    if (mortgageBalance > homeValue) warnings.push('Your starting mortgage balance exceeds the estimated home value (negative equity).');
+    if (warnings.length) {
+      warningEl.textContent = warnings.join(' ');
+      warningEl.style.display = 'block';
+    }
 
-    // Populate summary
     document.getElementById('equityNow').textContent = formatCurrency(equityNow);
     document.getElementById('ltvNow').textContent = 'LTV: ' + ltvNow.toFixed(1) + '%';
     document.getElementById('equityFuture').textContent = formatCurrency(futureData.equity);
     document.getElementById('ltvFuture').textContent = 'In ' + trackYears + ' years';
 
-    // Equity bars
-    const maxEquity = Math.max(...yearData.map(d => d.equity));
-    const barsEl = document.getElementById('equityBars');
-    barsEl.innerHTML = yearData
+    const maxPositiveEquity = Math.max(0, ...yearData.map(d => d.equity));
+    document.getElementById('equityBars').innerHTML = yearData
       .filter((d, i) => i % Math.max(1, Math.floor(trackYears / 10)) === 0 || i === trackYears)
       .map(d => {
-        const pct = maxEquity > 0 ? Math.min((d.equity / maxEquity) * 100, 100) : 0;
-        return `
-          <div class="equity-bar-row">
-            <span class="equity-bar-label">Yr ${d.year}</span>
-            <div class="equity-bar-track">
-              <div class="equity-bar-equity" style="width:${pct}%"></div>
-            </div>
-            <span class="equity-bar-value">${formatCurrency(d.equity)}</span>
-          </div>`;
+        const pct = maxPositiveEquity > 0 ? Math.max(0, Math.min(d.equity / maxPositiveEquity * 100, 100)) : 0;
+        return `<div class="equity-bar-row">
+          <span class="equity-bar-label">Yr ${d.year}</span>
+          <div class="equity-bar-track"><div class="equity-bar-equity" style="width:${pct}%"></div></div>
+          <span class="equity-bar-value">${formatCurrency(d.equity)}</span>
+        </div>`;
       }).join('');
 
-    // Milestones
     const milestoneThresholds = [
-      { label: '20% equity (LTV = 80%)', ltv: 80, desc: 'Minimum for most HELOC lenders' },
-      { label: '25% equity (LTV = 75%)', ltv: 75, desc: 'Better rates with many lenders' },
-      { label: '30% equity (LTV = 70%)', ltv: 70, desc: 'Strong equity position' },
+      {label: '20% equity (LTV = 80%)', ltv: 80, desc: 'Illustrative LTV benchmark, not an approval threshold'},
+      {label: '25% equity (LTV = 75%)', ltv: 75, desc: 'Illustrative LTV benchmark; lender terms vary'},
+      {label: '30% equity (LTV = 70%)', ltv: 70, desc: 'Illustrative equity position, not a rate guarantee'}
     ];
-
-    const milestonesEl = document.getElementById('milestones');
-    milestonesEl.innerHTML = milestoneThresholds.map(m => {
+    document.getElementById('milestones').innerHTML = milestoneThresholds.map(m => {
       const reached = ltvNow <= m.ltv;
       const yearReached = yearData.find(d => d.ltv <= m.ltv);
       const yearStr = reached ? 'Already reached ✓' : yearReached ? `Year ${yearReached.year}` : 'Beyond projection';
-      return `
-        <div class="equity-milestone ${reached ? 'reached' : ''}">
-          <div>
-            <div class="equity-milestone-label">${m.label}</div>
-            <div style="font-size:0.75rem;color:var(--text-muted);">${m.desc}</div>
-          </div>
-          <div class="equity-milestone-value">${yearStr}</div>
-        </div>`;
+      return `<div class="equity-milestone ${reached ? 'reached' : ''}">
+        <div><div class="equity-milestone-label">${m.label}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">${m.desc}</div></div>
+        <div class="equity-milestone-value">${yearStr}</div></div>`;
     }).join('');
 
-    // Explainer
     document.getElementById('resultExplainer').textContent =
-      `Your home equity stands at ${formatCurrency(equityNow)} today (${ltvNow.toFixed(1)}% LTV). Based on ${appreciation}% annual appreciation and your current mortgage payment, your equity is projected to grow to approximately ${formatCurrency(futureData.equity)} in ${trackYears} years.`;
-
+      `Your estimated equity is ${formatCurrency(equityNow)} today (${ltvNow.toFixed(1)}% LTV). Assuming ${appreciation}% annual home-value change, a fixed ${mortgageRate}% mortgage rate and a $${monthlyPayment.toLocaleString('en-US')} monthly principal-and-interest payment, projected equity is ${formatCurrency(futureData.equity)} in ${trackYears} years. This is an illustration, not a forecast or lending decision.`;
     document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('results').scrollIntoView({behavior: 'smooth', block: 'nearest'});
   }
 
   document.addEventListener('DOMContentLoaded', trackEquity);
