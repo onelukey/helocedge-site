@@ -85,7 +85,7 @@
           <label for="balance">Current HELOC Balance</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="balance" class="with-prefix" value="35000" min="0" step="500" />
+            <input type="number" id="balance" class="with-prefix" value="35000" min="0" step="any" />
           </div>
           <span class="field-hint">Amount currently owed on your HELOC</span>
         </div>
@@ -93,7 +93,7 @@
         <div class="field">
           <label for="rate">Interest Rate <i class="ti ti-info-circle" title="Your current variable APR"></i></label>
           <div class="field-input-wrap">
-            <input type="number" id="rate" class="with-suffix" value="8.5" min="0" step="0.1" />
+            <input type="number" id="rate" class="with-suffix" value="8.5" min="0" max="100" step="any" />
             <span class="field-suffix">%</span>
           </div>
           <span class="field-hint">Your current HELOC interest rate</span>
@@ -103,7 +103,7 @@
           <label for="monthlyPayment">Planned Monthly Payment</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="monthlyPayment" class="with-prefix" value="600" min="0" step="25" />
+            <input type="number" id="monthlyPayment" class="with-prefix" value="600" min="0" step="any" />
           </div>
           <span class="field-hint">What you plan to pay each month</span>
         </div>
@@ -111,9 +111,10 @@
 
       <div class="rate-explainer">
         <i class="ti ti-info-circle"></i>
-        <span>Your monthly payment must exceed the interest-only amount to make progress on the principal. If your payment equals or is less than the monthly interest charge, the balance will never reduce.</span>
+        <span>This simplified payoff model assumes a constant interest rate, no additional borrowing or fees, and a fixed monthly payment. The payment must cover more than the monthly interest to reduce a positive balance. Actual HELOC rates and required payments may change.</span>
       </div>
 
+      <p id="calcError" role="alert" aria-live="polite" style="display:none;background:#fff1f1;border:1px solid #f3b4b4;color:#991b1b;padding:12px;border-radius:8px;margin:12px 0;"></p>
       <button class="calc-btn" onclick="calculatePayoff()">
         <i class="ti ti-calculator"></i> Calculate My Payoff
       </button>
@@ -149,8 +150,12 @@
                   <td id="tblBalance">$0</td>
                 </tr>
                 <tr>
-                  <td>Monthly Payment</td>
+                  <td>Planned Monthly Payment</td>
                   <td id="tblPayment">$0</td>
+                </tr>
+                <tr>
+                  <td>Final Payment (estimated)</td>
+                  <td id="tblFinalPayment">$0</td>
                 </tr>
                 <tr>
                   <td>Total Interest Paid</td>
@@ -353,66 +358,127 @@
 <!-- ── JS: CALCULATOR ── -->
 <script>
   function formatCurrency(n) {
-    return '$' + Math.round(n).toLocaleString('en-US');
+    return '$' + Number(n).toLocaleString('en-US', {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    });
   }
 
   function calculatePayoff() {
-    const balance = parseFloat(document.getElementById('balance').value) || 0;
-    const annualRate = parseFloat(document.getElementById('rate').value) || 0;
-    const monthlyPayment = parseFloat(document.getElementById('monthlyPayment').value) || 0;
-    const monthlyRate = (annualRate / 100) / 12;
-    const monthlyInterest = balance * monthlyRate;
-
-    if (monthlyPayment <= monthlyInterest) {
-      document.getElementById('payoffTime').textContent = '∞';
-      document.getElementById('totalInterest').textContent = 'N/A';
-      document.getElementById('tblBalance').textContent = formatCurrency(balance);
-      document.getElementById('tblPayment').textContent = formatCurrency(monthlyPayment);
-      document.getElementById('tblInterest').textContent = 'N/A';
-      document.getElementById('tblTotal').textContent = 'N/A';
-      document.getElementById('tblPayoffDate').textContent = 'Never';
-      document.getElementById('resultExplainer').textContent =
-        `Your planned payment of ${formatCurrency(monthlyPayment)}/month does not exceed the monthly interest charge of ${formatCurrency(monthlyInterest)}. Increase your monthly payment above ${formatCurrency(monthlyInterest)} to start reducing your balance.`;
-      document.getElementById('results').classList.add('visible');
+    const byId = id => document.getElementById(id);
+    const error = byId('calcError');
+    error.style.display = 'none';
+    error.textContent = '';
+    const read = (id, label, min, max) => {
+      const raw = byId(id).value.trim();
+      if (raw === '') throw new Error(label + ' is required.');
+      const n = Number(raw);
+      if (!Number.isFinite(n) || n < min || n > max) {
+        throw new Error(label + ' must be between ' +
+          min.toLocaleString('en-US') + ' and ' +
+          max.toLocaleString('en-US') + '.');
+      }
+      return n;
+    };
+    let balance, annualRate, monthlyPayment;
+    try {
+      balance = read('balance', 'HELOC balance', 0, 100000000);
+      annualRate = read('rate', 'Interest rate', 0, 100);
+      monthlyPayment = read('monthlyPayment', 'Monthly payment', 0, 100000000);
+    } catch (err) {
+      error.textContent = err.message;
+      error.style.display = 'block';
+      byId('results').classList.remove('visible');
       return;
     }
 
-    // Calculate months to payoff
+    const monthlyRate = annualRate / 1200;
+    const firstInterest = balance * monthlyRate;
+    const show = (id, value) => { byId(id).textContent = value; };
+    show('tblBalance', formatCurrency(balance));
+    show('tblPayment', formatCurrency(monthlyPayment) + '/mo');
+
+    function showNotPaid(reason, months, remaining) {
+      show('payoffTime', 'Not paid off');
+      show('totalInterest', 'N/A');
+      show('tblFinalPayment', 'N/A');
+      show('tblInterest', 'N/A');
+      show('tblTotal', 'N/A');
+      show('tblPayoffDate', 'Not reached');
+      show('resultExplainer', reason +
+        (months ? ' After ' + months + ' months, the modelled remaining balance is ' +
+          formatCurrency(remaining) + '.' : '') +
+        ' This is an illustrative constant-rate scenario, not a lender payoff quote.');
+      byId('results').classList.add('visible');
+    }
+
+    if (balance === 0) {
+      show('payoffTime', 'Already paid off');
+      show('totalInterest', formatCurrency(0));
+      show('tblFinalPayment', formatCurrency(0));
+      show('tblInterest', formatCurrency(0));
+      show('tblTotal', formatCurrency(0));
+      show('tblPayoffDate', 'Already paid off');
+      show('resultExplainer', 'The entered balance is zero, so there is nothing to repay.');
+      byId('results').classList.add('visible');
+      return;
+    }
+    if (monthlyPayment <= firstInterest) {
+      showNotPaid('The planned payment of ' + formatCurrency(monthlyPayment) +
+        ' does not exceed the first month\'s interest charge of ' +
+        formatCurrency(firstInterest) + ', so the balance will not decrease.', 0, balance);
+      return;
+    }
+
     let remaining = balance;
     let months = 0;
-    let totalInterestPaid = 0;
-    while (remaining > 0 && months < 600) {
-      const interestCharge = remaining * monthlyRate;
-      totalInterestPaid += interestCharge;
-      remaining = remaining + interestCharge - monthlyPayment;
-      if (remaining < 0) remaining = 0;
+    let totalInterest = 0;
+    let totalPaid = 0;
+    let finalPayment = 0;
+    const limit = 600;
+    while (remaining > 0.000001 && months < limit) {
+      const interest = remaining * monthlyRate;
+      const due = remaining + interest;
+      const paid = Math.min(monthlyPayment, due);
+      remaining = Math.max(0, due - paid);
+      totalInterest += interest;
+      totalPaid += paid;
+      finalPayment = paid;
       months++;
+    }
+    if (remaining > 0.000001) {
+      showNotPaid('The balance is not fully repaid within the 50-year (600-month) modelling limit.', months, remaining);
+      return;
     }
 
     const years = Math.floor(months / 12);
-    const remMonths = months % 12;
-    const payoffTimeStr = years > 0
-      ? `${years} yr${years > 1 ? 's' : ''} ${remMonths > 0 ? remMonths + ' mo' : ''}`.trim()
-      : `${months} months`;
+    const extraMonths = months % 12;
+    const payoffTime = years ?
+      (years + ' yr' + (years === 1 ? '' : 's') +
+        (extraMonths ? ' ' + extraMonths + ' mo' : '')) :
+      (months + ' month' + (months === 1 ? '' : 's'));
+    const date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() + months);
+    const payoffDate = date.toLocaleDateString('en-US', {
+      month: 'long', year: 'numeric'
+    });
 
-    const payoffDate = new Date();
-    payoffDate.setMonth(payoffDate.getMonth() + months);
-    const payoffDateStr = payoffDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-    const totalPaid = (monthlyPayment * months) - (monthlyPayment - (balance * monthlyRate));
-
-    document.getElementById('payoffTime').textContent = payoffTimeStr;
-    document.getElementById('totalInterest').textContent = formatCurrency(totalInterestPaid);
-    document.getElementById('tblBalance').textContent = formatCurrency(balance);
-    document.getElementById('tblPayment').textContent = formatCurrency(monthlyPayment) + '/mo';
-    document.getElementById('tblInterest').textContent = formatCurrency(totalInterestPaid);
-    document.getElementById('tblTotal').textContent = formatCurrency(balance + totalInterestPaid);
-    document.getElementById('tblPayoffDate').textContent = payoffDateStr;
-    document.getElementById('resultExplainer').textContent =
-      `At ${formatCurrency(monthlyPayment)}/month on a ${formatCurrency(balance)} balance at ${annualRate}%, your HELOC will be fully paid off in approximately ${payoffTimeStr} — around ${payoffDateStr}. You'll pay a total of ${formatCurrency(totalInterestPaid)} in interest over that period.`;
-
-    document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    show('payoffTime', payoffTime);
+    show('totalInterest', formatCurrency(totalInterest));
+    show('tblFinalPayment', formatCurrency(finalPayment));
+    show('tblInterest', formatCurrency(totalInterest));
+    show('tblTotal', formatCurrency(totalPaid));
+    show('tblPayoffDate', payoffDate);
+    show('resultExplainer',
+      'With a starting balance of ' + formatCurrency(balance) +
+      ', a constant ' + annualRate + '% annual rate and planned payments of ' +
+      formatCurrency(monthlyPayment) + '/month, the estimated payoff time is ' +
+      payoffTime + ' (around ' + payoffDate + '). Total modelled interest is ' +
+      formatCurrency(totalInterest) + '. The final payment is ' +
+      formatCurrency(finalPayment) + ', which may be less than the planned monthly payment. ' +
+      'This model excludes new draws, fees and future rate changes.');
+    byId('results').classList.add('visible');
+    byId('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   document.addEventListener('DOMContentLoaded', calculatePayoff);
