@@ -83,14 +83,14 @@
     <!-- ── CALCULATOR WIDGET ── -->
     <div class="calc-widget">
       <h2>Calculate Your Draw Period Payment</h2>
-      <p class="calc-widget-sub">Most HELOCs require interest-only payments during the draw period. Enter your balance and rate to see your minimum monthly obligation.</p>
+      <p class="calc-widget-sub">Some HELOCs allow interest-only payments during the draw period. Enter your outstanding balance and annual rate to estimate monthly interest; your lender’s required payment may differ.</p>
 
       <div class="field-grid">
         <div class="field">
           <label for="balance">Amount Drawn / Balance</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="balance" class="with-prefix" value="40000" min="0" step="1000" />
+            <input type="number" id="balance" class="with-prefix" value="40000" min="0" step="any" />
           </div>
           <span class="field-hint">The amount you've drawn from your credit line</span>
         </div>
@@ -98,10 +98,10 @@
         <div class="field">
           <label for="rate">Interest Rate <i class="ti ti-info-circle" title="Your current variable APR"></i></label>
           <div class="field-input-wrap">
-            <input type="number" id="rate" class="with-suffix" value="8.5" min="0" step="0.1" />
+            <input type="number" id="rate" class="with-suffix" value="8.5" min="0" max="100" step="any" />
             <span class="field-suffix">%</span>
           </div>
-          <span class="field-hint">Your current HELOC variable rate</span>
+          <span class="field-hint">Enter the annual rate quoted by your lender</span>
         </div>
 
         <div class="field">
@@ -116,9 +116,10 @@
 
       <div class="rate-explainer">
         <i class="ti ti-info-circle"></i>
-        <span>Interest-only payments are calculated as: <strong>Balance × (Annual Rate ÷ 12)</strong>. Your payment changes automatically if your variable rate moves up or down. Check the current average via <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac's published rates</a>.</span>
+        <span>Estimated monthly interest is <strong>Outstanding balance × (Annual rate ÷ 12)</strong>. This simplified model assumes a constant balance and rate, no principal repayments, additional draws or fees. Actual HELOC interest is often calculated daily. Enter your lender’s quoted rate; mortgage-rate surveys are not HELOC quotes.</span>
       </div>
 
+      <p id="calcError" role="alert" aria-live="polite" style="display:none;background:#fff1f1;border:1px solid #f3b4b4;color:#991b1b;padding:12px;border-radius:8px;margin:12px 0;"></p>
       <button class="calc-btn" onclick="calculateInterestOnly()">
         <i class="ti ti-calculator"></i> Calculate My Payment
       </button>
@@ -129,16 +130,16 @@
           <div class="result-box gold">
             <div class="result-box-label">Monthly Interest-Only Payment</div>
             <div class="result-box-value" id="monthlyPayment">$0</div>
-            <div class="result-box-sub">Your draw period minimum</div>
+            <div class="result-box-sub">Illustrative monthly interest, not a lender quote</div>
           </div>
           <div class="result-box">
             <div class="result-box-label">Total Interest Over Draw Period</div>
             <div class="result-box-value" id="totalDrawInterest">$0</div>
-            <div class="result-box-sub">If balance stays constant</div>
+            <div class="result-box-sub">If balance and rate stay constant</div>
           </div>
         </div>
 
-        <h3 style="font-size:0.95rem; color:var(--navy); margin-bottom:0.75rem; font-weight:600;">How Your Payment Changes at Different Draw Amounts</h3>
+        <h3 style="font-size:0.95rem; color:var(--navy); margin-bottom:0.75rem; font-weight:600;">Illustrative Monthly Interest at Different Outstanding Balances</h3>
         <div class="draw-scenario-grid" id="scenarioGrid"></div>
 
         <div class="callout callout-tip" style="margin-top:1.5rem;">
@@ -154,7 +155,7 @@
     <!-- ── ARTICLE CONTENT ── -->
     <div class="article-content">
       <h2>What Is an Interest-Only HELOC Payment?</h2>
-      <p>During the draw period (typically the first 10 years of a HELOC), most lenders only require you to pay the interest that accrues each month on your outstanding balance. No principal is required to be repaid during this phase, which is why draw period payments are significantly lower than what you'll pay once the repayment period begins.</p>
+      <p>During the draw period (typically the first 10 years of a HELOC), some lenders allow you to pay only the interest that accrues each month on your outstanding balance. Under an interest-only arrangement, principal payments are not required during this phase, which is why draw period payments are significantly lower than what you'll pay once the repayment period begins.</p>
 
       <h3>The Formula Is Simple</h3>
       <p>Interest-only payment = <strong>Balance × (Annual Rate ÷ 12)</strong>. On a $40,000 balance at 8.5%, that's $40,000 × (0.085 ÷ 12) = approximately $283 per month. The catch is that when the draw period ends, you'll still owe the full $40,000 — and your payment will jump to cover both principal and interest over the remaining repayment term.</p>
@@ -183,7 +184,7 @@
               Can I pay more than the interest-only minimum?
               <i class="ti ti-plus"></i>
             </button>
-            <div class="faq-a">Yes, and you should if you can afford to. Paying more than the interest-only minimum during the draw period reduces your principal, which lowers future interest charges and reduces the payment shock when repayment begins.</div>
+            <div class="faq-a">Often, subject to your loan terms. Paying more than the interest-only amount toward principal during the draw period can reduce your balance, which lowers future interest charges and reduces the payment shock when repayment begins.</div>
           </div>
 
           <div class="faq-item">
@@ -191,7 +192,7 @@
               What happens when the draw period ends?
               <i class="ti ti-plus"></i>
             </button>
-            <div class="faq-a">Once the draw period ends, you can no longer borrow and your minimum payment switches from interest-only to a full amortizing payment covering both principal and interest. If you've paid nothing toward principal, this jump can be substantial.</div>
+            <div class="faq-a">Once the draw period ends, you can no longer borrow and payments may switch from interest-only to principal-and-interest payments covering both principal and interest. If you've paid nothing toward principal, this jump can be substantial.</div>
           </div>
 
           <div class="faq-item">
@@ -199,7 +200,7 @@
               Does my payment change if I draw more from the line?
               <i class="ti ti-plus"></i>
             </button>
-            <div class="faq-a">Yes. Interest-only payments are calculated on the outstanding balance, so every additional draw increases your monthly minimum. The three scenario boxes in the calculator above show how your payment scales at different draw amounts.</div>
+            <div class="faq-a">Yes. Interest-only payments are calculated on the outstanding balance, so additional draws generally increase the interest charged. The three scenario boxes in the calculator above show how your payment scales at different draw amounts.</div>
           </div>
 
         </div>
@@ -323,39 +324,62 @@
 <!-- ── JS: CALCULATOR ── -->
 <script>
   function formatCurrency(n) {
-    return '$' + Math.round(n).toLocaleString('en-US');
+    return '$' + Number(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   }
-
   function calculateInterestOnly() {
-    const balance = parseFloat(document.getElementById('balance').value) || 0;
-    const annualRate = parseFloat(document.getElementById('rate').value) || 0;
-    const drawYears = parseFloat(document.getElementById('drawYears').value) || 0;
-    const monthlyRate = (annualRate / 100) / 12;
+    const byId = id => document.getElementById(id);
+    const error = byId('calcError');
+    error.textContent = '';
+    error.style.display = 'none';
+    function read(id, label, min, max, wholeNumber) {
+      const raw = byId(id).value.trim();
+      if (raw === '') throw new Error(label + ' is required.');
+      const value = Number(raw);
+      if (!Number.isFinite(value) || value < min || value > max ||
+          (wholeNumber && !Number.isInteger(value))) {
+        throw new Error(label + ' must be ' + (wholeNumber ? 'a whole number ' : '') +
+          'between ' + min.toLocaleString('en-US') + ' and ' + max.toLocaleString('en-US') + '.');
+      }
+      return value;
+    }
+    let balance, annualRate, drawYears;
+    try {
+      balance = read('balance', 'Outstanding balance', 0, 100000000, false);
+      annualRate = read('rate', 'Interest rate', 0, 100, false);
+      drawYears = read('drawYears', 'Draw period remaining', 1, 20, true);
+    } catch (err) {
+      error.textContent = err.message;
+      error.style.display = 'block';
+      byId('results').classList.remove('visible');
+      return;
+    }
+    const monthlyRate = annualRate / 1200;
     const monthlyPayment = balance * monthlyRate;
-    const totalDrawInterest = monthlyPayment * (drawYears * 12);
-
-    document.getElementById('monthlyPayment').textContent = formatCurrency(monthlyPayment);
-    document.getElementById('totalDrawInterest').textContent = formatCurrency(totalDrawInterest);
-
-    // Scenario grid: 50%, 75%, 100% of credit line
+    const totalDrawInterest = monthlyPayment * drawYears * 12;
+    byId('monthlyPayment').textContent = formatCurrency(monthlyPayment);
+    byId('totalDrawInterest').textContent = formatCurrency(totalDrawInterest);
     const scenarios = [
-      { label: '50% of balance', amount: balance * 0.5 },
-      { label: 'Your balance', amount: balance },
-      { label: '125% of balance', amount: balance * 1.25 }
+      {label: '50% of entered balance', amount: balance * 0.5},
+      {label: 'Entered balance', amount: balance},
+      {label: '125% of entered balance', amount: balance * 1.25}
     ];
-    const grid = document.getElementById('scenarioGrid');
-    grid.innerHTML = scenarios.map(s => `
+    byId('scenarioGrid').innerHTML = scenarios.map(s => `
       <div class="draw-scenario">
         <div class="draw-scenario-amount">${formatCurrency(s.amount * monthlyRate)}/mo</div>
-        <div class="draw-scenario-label">${formatCurrency(s.amount)} drawn<br>(${s.label})</div>
+        <div class="draw-scenario-label">${formatCurrency(s.amount)} outstanding<br>(${s.label})</div>
       </div>
     `).join('');
-
-    document.getElementById('resultExplainer').textContent =
-      `On a drawn balance of ${formatCurrency(balance)} at ${annualRate}%, your minimum monthly payment is ${formatCurrency(monthlyPayment)} — interest only. Over a ${drawYears}-year draw period at this balance, you'd pay ${formatCurrency(totalDrawInterest)} in interest with your principal unchanged at ${formatCurrency(balance)}.`;
-
-    document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    byId('resultExplainer').textContent =
+      'At a constant ' + annualRate + '% annual rate on an outstanding balance of ' +
+      formatCurrency(balance) + ', estimated monthly interest is ' +
+      formatCurrency(monthlyPayment) + '. Over ' + drawYears +
+      ' year(s), that totals ' + formatCurrency(totalDrawInterest) +
+      ' in interest if balance and rate stay unchanged. Interest-only payments do not reduce ' +
+      'the ' + formatCurrency(balance) + ' principal. The three scenarios illustrate different ' +
+      'outstanding balances, not approved credit limits. Actual interest and required payments ' +
+      'may vary with daily accrual, rate changes, draws, fees and lender terms.';
+    byId('results').classList.add('visible');
+    byId('results').scrollIntoView({behavior: 'smooth', block: 'nearest'});
   }
 
   document.addEventListener('DOMContentLoaded', calculateInterestOnly);
