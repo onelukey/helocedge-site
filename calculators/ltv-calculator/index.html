@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LTV Calculator — Loan-to-Value Ratio for HELOC Eligibility | HELOCEdge.com</title>
-  <meta name="description" content="Free LTV calculator. Find your loan-to-value and combined loan-to-value (CLTV) ratio instantly to see if you qualify for a HELOC." />
+  <meta name="description" content="Free LTV and CLTV calculator. Estimate your current loan-to-value ratios, understand existing secured debt, and explore HELOC borrowing considerations." />
   <link rel="canonical" href="https://helocedge.com/calculators/ltv-calculator/" />
 
   <!-- GA4 -->
@@ -78,14 +78,14 @@
     <!-- ── CALCULATOR WIDGET ── -->
     <div class="calc-widget">
       <h2>Calculate Your Loan-to-Value Ratio</h2>
-      <p class="calc-widget-sub">Your LTV (or CLTV if you have a second mortgage) is one of the first things lenders check for HELOC eligibility.</p>
+      <p class="calc-widget-sub">Estimate your current loan-to-value ratio. Include second mortgages or existing HELOC balances to calculate combined loan-to-value (CLTV). This does not determine eligibility.</p>
 
       <div class="field-grid">
         <div class="field">
           <label for="homeValue">Home Value</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="homeValue" class="with-prefix" value="450000" min="0" step="5000" />
+            <input type="number" id="homeValue" class="with-prefix" value="450000" min="1" step="any" />
           </div>
           <span class="field-hint">Current estimated market value</span>
         </div>
@@ -94,7 +94,7 @@
           <label for="mortgageBalance">Mortgage Balance</label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="mortgageBalance" class="with-prefix" value="220000" min="0" step="5000" />
+            <input type="number" id="mortgageBalance" class="with-prefix" value="220000" min="0" step="any" />
           </div>
           <span class="field-hint">What you still owe on your primary mortgage</span>
         </div>
@@ -103,12 +103,13 @@
           <label for="otherLiens">Other Liens (optional) <i class="ti ti-info-circle" title="Second mortgage or existing HELOC balance"></i></label>
           <div class="field-input-wrap">
             <span class="field-prefix">$</span>
-            <input type="number" id="otherLiens" class="with-prefix" value="0" min="0" step="1000" />
+            <input type="number" id="otherLiens" class="with-prefix" value="0" min="0" step="any" />
           </div>
           <span class="field-hint">Leave at $0 if none — adding this calculates CLTV instead</span>
         </div>
       </div>
 
+      <p id="calcError" role="alert" aria-live="polite" style="display:none;background:#fff1f1;border:1px solid #f3b4b4;color:#991b1b;padding:12px;border-radius:8px;margin:12px 0;"></p>
       <button class="calc-btn" onclick="calculateLtv()">
         <i class="ti ti-calculator"></i> Calculate My LTV
       </button>
@@ -128,6 +129,7 @@
             <span>100%</span>
           </div>
           <div class="ltv-status-pill" id="ltvStatusPill"></div>
+          <p id="gaugeNote" style="font-size:.8rem;margin-top:.5rem;"></p>
         </div>
 
         <div class="results-table-wrap">
@@ -146,6 +148,14 @@
                   <td id="tblHomeValue">$0</td>
                 </tr>
                 <tr>
+                  <td>Primary Mortgage Balance</td>
+                  <td id="tblMortgage">$0</td>
+                </tr>
+                <tr>
+                  <td>Other Liens / Existing HELOC Balance</td>
+                  <td id="tblOtherLiens">$0</td>
+                </tr>
+                <tr>
                   <td>Total Debt Secured Against Home</td>
                   <td id="tblTotalDebt">$0</td>
                 </tr>
@@ -162,7 +172,7 @@
           <i class="ti ti-bulb"></i>
           <div class="callout-content">
             <strong>What this means</strong>
-            <p id="resultExplainer">Most lenders require an LTV or CLTV of 80–90% or lower to approve a HELOC.</p>
+            <p id="resultExplainer">Your current ratio is only one part of a lender’s assessment. Proposed borrowing and lender-specific criteria also matter.</p>
           </div>
         </div>
       </div>
@@ -171,18 +181,13 @@
     <!-- ── ARTICLE CONTENT ── -->
     <div class="article-content">
       <h2>What Is LTV and Why It Matters</h2>
-      <p>Loan-to-Value (LTV) is the percentage of your home's value that's covered by debt. It's calculated as: <strong>Mortgage Balance ÷ Home Value × 100</strong>. Lenders use this figure to assess risk — the lower your LTV, the more equity cushion you have, and the more confident a lender is in approving you for additional borrowing like a HELOC.</p>
+      <p>Loan-to-Value (LTV) is the percentage of your home's value that's covered by debt. It's calculated as: <strong>Mortgage Balance ÷ Home Value × 100</strong>. Lenders use this figure to assess risk — a lower ratio generally indicates a larger equity cushion, but it does not guarantee approval for additional borrowing.</p>
 
       <h3>LTV vs. CLTV — What's the Difference?</h3>
-      <p>LTV considers only your primary mortgage. <strong>CLTV (Combined Loan-to-Value)</strong> adds in any other debt secured against your home — a second mortgage, an existing HELOC, or any other lien — divided by your home's value. If you have any additional liens, lenders will use your CLTV, not your plain LTV, to assess HELOC eligibility.</p>
+      <p>LTV considers only your primary mortgage. <strong>CLTV (Combined Loan-to-Value)</strong> adds in any other debt secured against your home — a second mortgage, an existing HELOC, or any other lien — divided by your home's value. Lenders may examine CLTV when assessing additional secured borrowing. This calculator does not include any new HELOC amount you might request.</p>
 
-      <h3>What Counts as a "Good" LTV?</h3>
-      <ul>
-        <li><strong>Below 60%:</strong> Excellent — strong equity position, most lenders will approve favorable terms</li>
-        <li><strong>60–80%:</strong> Good — within typical lender comfort zone for most HELOC products</li>
-        <li><strong>80–90%:</strong> Borderline — some lenders approve here, often with a higher rate or stricter requirements</li>
-        <li><strong>Above 90%:</strong> Difficult — few lenders will extend a HELOC at this level</li>
-      </ul>
+      <h3>How to Interpret Your Ratio</h3>
+      <p>Lower LTV or CLTV generally means more equity remains in the property. A ratio near or above 100% means existing secured debt is close to or greater than the estimated property value. No single ratio guarantees a HELOC: lenders set their own limits and consider proposed borrowing, credit, income and other requirements.</p>
 
       <div class="callout callout-warning">
         <i class="ti ti-alert-triangle"></i>
@@ -193,7 +198,7 @@
       </div>
 
       <h2>Next Steps</h2>
-      <p>Once you know your LTV, the natural next step is finding out exactly how much you could borrow. Try our <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a> for your maximum HELOC credit line.</p>
+      <p>Once you know your LTV, the natural next step is finding out exactly how much you could borrow. Try our <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a> for an illustrative borrowing-capacity estimate.</p>
     </div>
 
     <!-- ── FAQ ── -->
@@ -351,56 +356,83 @@
 <!-- ── JS: CALCULATOR ── -->
 <script>
   function formatCurrency(num) {
-    return '$' + Math.round(num).toLocaleString('en-US');
+    return '$' + Number(num).toLocaleString('en-US', {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    });
   }
 
   function calculateLtv() {
-    const homeValue = parseFloat(document.getElementById('homeValue').value) || 0;
-    const mortgageBalance = parseFloat(document.getElementById('mortgageBalance').value) || 0;
-    const otherLiens = parseFloat(document.getElementById('otherLiens').value) || 0;
+    const byId = id => document.getElementById(id);
+    const error = byId('calcError');
+    error.textContent = '';
+    error.style.display = 'none';
+
+    function read(id, label, min, max, optional) {
+      const raw = byId(id).value.trim();
+      if (raw === '') {
+        if (optional) return 0;
+        throw new Error(label + ' is required.');
+      }
+      const value = Number(raw);
+      if (!Number.isFinite(value) || value < min || value > max) {
+        throw new Error(label + ' must be between ' +
+          min.toLocaleString('en-US') + ' and ' +
+          max.toLocaleString('en-US') + '.');
+      }
+      return value;
+    }
+
+    let homeValue, mortgageBalance, otherLiens;
+    try {
+      homeValue = read('homeValue', 'Home value', 0.01, 1000000000, false);
+      mortgageBalance = read('mortgageBalance', 'Mortgage balance', 0, 1000000000, false);
+      otherLiens = read('otherLiens', 'Other liens', 0, 1000000000, true);
+    } catch (err) {
+      error.textContent = err.message;
+      error.style.display = 'block';
+      byId('results').classList.remove('visible');
+      return;
+    }
 
     const totalDebt = mortgageBalance + otherLiens;
-    const ratio = homeValue > 0 ? (totalDebt / homeValue) * 100 : 0;
+    const ratio = totalDebt / homeValue * 100;
     const isCltv = otherLiens > 0;
     const label = isCltv ? 'CLTV' : 'LTV';
+    byId('ltvValue').textContent = ratio.toFixed(1) + '%';
+    byId('ltvTypeLabel').textContent = isCltv ?
+      'Combined Loan-to-Value (CLTV)' : 'Loan-to-Value (LTV) Ratio';
 
-    // Gauge value + label
-    document.getElementById('ltvValue').textContent = ratio.toFixed(1) + '%';
-    document.getElementById('ltvTypeLabel').textContent = isCltv ? 'Combined Loan-to-Value (CLTV)' : 'Loan-to-Value (LTV) Ratio';
+    const barFill = byId('ltvBarFill');
+    barFill.style.width = Math.max(0, Math.min(ratio, 100)) + '%';
+    barFill.style.background = ratio >= 100 ? '#b45309' : 'var(--navy)';
+    byId('gaugeNote').textContent = ratio > 100 ?
+      'The gauge is capped at 100% for display; the numerical ratio above shows the full value.' :
+      'Gauge displays the current secured-debt ratio, not an approval threshold.';
 
-    // Bar fill
-    const barFill = document.getElementById('ltvBarFill');
-    const clampedWidth = Math.min(ratio, 100);
-    barFill.style.width = clampedWidth + '%';
+    const pill = byId('ltvStatusPill');
+    pill.className = 'ltv-status-pill ' +
+      (ratio >= 100 ? 'ltv-status-warn' : 'ltv-status-good');
+    pill.textContent = ratio > 100 ?
+      'Existing debt exceeds estimated home value' :
+      ratio === 100 ? 'Existing debt equals estimated home value' :
+      'Current secured-debt ratio (not an eligibility decision)';
 
-    // Status pill + colour logic
-    const pill = document.getElementById('ltvStatusPill');
-    let statusClass, statusText, barColor;
-    if (ratio < 60) {
-      statusClass = 'ltv-status-good'; statusText = '✓ Excellent position'; barColor = '#16a34a';
-    } else if (ratio < 80) {
-      statusClass = 'ltv-status-good'; statusText = '✓ Good — within typical lender range'; barColor = '#16a34a';
-    } else if (ratio < 90) {
-      statusClass = 'ltv-status-warn'; statusText = '⚠ Borderline — varies by lender'; barColor = '#ea580c';
-    } else {
-      statusClass = 'ltv-status-bad'; statusText = '✕ Above typical lender limits'; barColor = '#dc2626';
-    }
-    pill.className = 'ltv-status-pill ' + statusClass;
-    pill.textContent = statusText;
-    barFill.style.background = barColor;
+    byId('tblHomeValue').textContent = formatCurrency(homeValue);
+    byId('tblMortgage').textContent = formatCurrency(mortgageBalance);
+    byId('tblOtherLiens').textContent = formatCurrency(otherLiens);
+    byId('tblTotalDebt').textContent = formatCurrency(totalDebt);
+    byId('tblRatioLabel').textContent = label + ' Ratio';
+    byId('tblRatio').textContent = ratio.toFixed(1) + '%';
+    byId('resultExplainer').textContent =
+      'Your current ' + label + ' is ' + ratio.toFixed(1) +
+      '%, based on ' + formatCurrency(totalDebt) +
+      ' of existing debt secured against a home valued at ' +
+      formatCurrency(homeValue) + '. This is not a HELOC eligibility or approval assessment. ' +
+      'A lender will also consider the amount of any proposed new HELOC, its own CLTV limits, ' +
+      'your creditworthiness, income and other requirements.';
 
-    // Table
-    document.getElementById('tblHomeValue').textContent = formatCurrency(homeValue);
-    document.getElementById('tblTotalDebt').textContent = formatCurrency(totalDebt);
-    document.getElementById('tblRatioLabel').textContent = label + ' Ratio';
-    document.getElementById('tblRatio').textContent = ratio.toFixed(1) + '%';
-
-    // Explainer
-    document.getElementById('resultExplainer').textContent =
-      `Your ${label} is ${ratio.toFixed(1)}%, based on ${formatCurrency(totalDebt)} in debt against a ${formatCurrency(homeValue)} home value. Most lenders require 80–90% or lower to approve a HELOC, so ${ratio < 90 ? 'you likely meet the typical threshold, though final approval also depends on credit score and income' : 'you may find it difficult to qualify with most lenders at this level'}.`;
-
-    document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    byId('results').classList.add('visible');
+    byId('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // Calculate on load with default values
