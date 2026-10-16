@@ -26,6 +26,35 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <!-- Tabler Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<!-- HE-026 mobile-only comparison table: show every option without horizontal scrolling -->
+<style>
+@media (max-width: 640px) {
+  .he026-comparison { overflow: visible; border: 0; border-radius: 0; }
+  .he026-comparison table, .he026-comparison tbody,
+  .he026-comparison tr, .he026-comparison td { display: block; width: 100%; box-sizing: border-box; }
+  .he026-comparison thead { display: none; }
+  .he026-comparison tbody tr {
+    margin: 0 0 1rem; border: 1px solid var(--border, #d9d9d9);
+    border-radius: 10px; overflow: hidden;
+  }
+  .he026-comparison tbody td {
+    display: grid; grid-template-columns: minmax(92px, 36%) minmax(0, 1fr);
+    gap: 0.65rem; padding: 0.7rem 0.8rem; overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--border, #d9d9d9);
+  }
+  .he026-comparison tbody td:last-child { border-bottom: 0; }
+  .he026-comparison tbody td:first-child {
+    display: block; background: var(--navy, #142650); color: white;
+    font-weight: 700; padding: 0.7rem 0.8rem;
+  }
+  .he026-comparison tbody td:not(:first-child)::before {
+    font-weight: 700; color: var(--navy, #142650);
+  }
+  .he026-comparison tbody td:nth-child(2)::before { content: "HELOC"; }
+  .he026-comparison tbody td:nth-child(3)::before { content: "Personal loan"; }
+  .he026-comparison tbody td:nth-child(4)::before { content: "Credit card"; }
+}
+</style>
 </head>
 <body>
 
@@ -64,7 +93,7 @@
 
     <h2>The three options at a glance</h2>
 
-    <div class="table-wrap">
+    <div class="table-wrap he026-comparison">
       <table>
         <thead>
           <tr>
