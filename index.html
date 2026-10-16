@@ -474,7 +474,16 @@
     document.getElementById('quizTitle').textContent = r.title;
     document.getElementById('quizDesc').textContent = r.desc;
     document.getElementById('quizLink').href = r.url;
-    document.getElementById('quizResult').classList.add('visible');
+    const resultPanel = document.getElementById('quizResult');
+    resultPanel.classList.add('visible');
+    // Bring the revealed recommendation into view, especially on narrow screens.
+    // Respect visitors who prefer reduced motion.
+    requestAnimationFrame(() => {
+      resultPanel.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'center'
+      });
+    });
   }
 </script>
 
