@@ -7,8 +7,7 @@
   <meta name="description" content="Free HELOC calculators and tools for US homeowners. Calculate payments, borrowing power, compare HELOC vs home equity loan, and more — all in one place." />
   <link rel="canonical" href="https://helocedge.com/" />
 
-  <!-- HE-030B.9: HOMEPAGE-ONLY analytics opt-in experiment. AdSense remains disabled.
-       Not an advertising CMP; other pages are unchanged. -->
+  <!-- HE-030B.10A: analytics opt-in site-wide; advertising tags paused pending certified CMP. -->
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,15 +21,8 @@
   <link rel="stylesheet" href="/css/style.css" />
 
   <style>/* page-specific styles only — global styles are in /css/style.css */</style>
-<style id="he030b9-style">
-#he-consent[hidden],#he-consent-settings[hidden]{display:none!important}
-#he-consent{position:fixed;z-index:99999;bottom:12px;left:12px;right:12px;max-width:620px;margin:auto;padding:18px;background:white;color:#15264a;border:1px solid #bbc6d8;border-radius:12px;box-shadow:0 4px 28px #0004;font:15px/1.5 Arial,sans-serif}
-#he-consent h2{font:700 19px Arial,sans-serif;color:#15264a;margin:0 0 10px}#he-consent p{margin:0 0 12px}#he-consent a{color:#1459a2;text-decoration:underline}
-#he-consent .choices{display:flex;gap:10px;flex-wrap:wrap}#he-consent button{flex:1 1 180px;border:2px solid #153260;border-radius:7px;background:#fff;color:#153260;padding:11px;min-height:44px;font-weight:700;cursor:pointer}
-#he-consent-settings{position:fixed;bottom:12px;left:12px;z-index:99998;background:#fff;color:#153260;border:1px solid #153260;border-radius:7px;padding:11px;font-weight:700;cursor:pointer}
-#he-consent button:focus-visible,#he-consent-settings:focus-visible{outline:3px solid #e9a400;outline-offset:2px}
-@media(max-width:450px){#he-consent{padding:13px;left:7px;right:7px;bottom:7px}#he-consent button{flex-basis:100%}}
-</style>
+
+<link rel="stylesheet" href="/css/analytics-consent.css" />
 </head>
 <body>
 
@@ -490,44 +482,10 @@
 <!-- HE-030B.9: Analytics-only consent test; not an advertising CMP. -->
 <section id="he-consent" role="region" aria-labelledby="he-consent-title" hidden>
 <h2 id="he-consent-title">Optional website analytics</h2>
-<p>We would like to use Google Analytics to understand visits to this page. You can accept or reject. Your choice does not affect our calculators. See our <a href="/privacy-policy/">Privacy Policy</a> (under review).</p>
+<p>We would like to use Google Analytics to understand visits to this website. You can accept or reject. Your choice does not affect our calculators. See our <a href="/privacy-policy/">Privacy Policy</a>.</p>
 <div class="choices"><button type="button" id="he-reject">Reject analytics</button><button type="button" id="he-accept">Accept analytics</button></div>
 </section>
 <button type="button" id="he-consent-settings" hidden>Analytics choices</button>
-<script id="he030b9-script">
-(function(){
-  'use strict';
-  var key='he_home_analytics_consent_v1';
-  var panel=document.getElementById('he-consent');
-  var settings=document.getElementById('he-consent-settings');
-  var loaded=false;
-  function read(){try{return localStorage.getItem(key)}catch(e){return null}}
-  function write(v){try{localStorage.setItem(key,v)}catch(e){}}
-  function start(){
-    if(loaded)return;
-    loaded=true;
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=function(){window.dataLayer.push(arguments)};
-    window.gtag('js',new Date());
-    window.gtag('config','G-9RLKEB7GMX');
-    var script=document.createElement('script');
-    script.async=true;
-    script.src='https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX';
-    document.head.appendChild(script);
-  }
-  function apply(choice){
-    panel.hidden=true;settings.hidden=false;
-    if(choice==='accept')start();
-    // Already-loaded GA cannot be unloaded: reload when withdrawing consent.
-    if(choice==='reject'&&loaded)location.reload();
-  }
-  document.getElementById('he-accept').addEventListener('click',function(){write('accept');apply('accept')});
-  document.getElementById('he-reject').addEventListener('click',function(){write('reject');apply('reject')});
-  settings.addEventListener('click',function(){panel.hidden=false;settings.hidden=true;document.getElementById('he-reject').focus()});
-  var saved=read();
-  if(saved==='accept'||saved==='reject')apply(saved);
-  else panel.hidden=false;
-})();
-</script>
+<script defer src="/js/analytics-consent.js"></script>
 </body>
 </html>
