@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Equity Tracker — See Your Equity Grow Over Time | HELOCEdge.com</title>
+  <meta name="description" content="Free home equity tracker. Visualise how your equity builds over time through mortgage paydown and home appreciation — and see when you'll hit key HELOC thresholds." />
+  <link rel="canonical" href="https://helocedge.com/calculators/home-equity-tracker/" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    .equity-bar-wrap { margin: 1.5rem 0; }
+    .equity-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+    .equity-bar-label { font-size: 0.78rem; color: var(--text-muted); width: 60px; flex-shrink: 0; text-align: right; }
+    .equity-bar-track { flex-grow: 1; height: 22px; background: var(--bg); border-radius: 100px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+    .equity-bar-equity { height: 100%; background: var(--navy); border-radius: 100px 0 0 100px; transition: width 0.4s ease; }
+    .equity-bar-value { font-size: 0.78rem; font-weight: 600; color: var(--navy); width: 80px; flex-shrink: 0; }
+    .equity-milestone { background: var(--navy-light); border: 1px solid rgba(15,37,87,0.12); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+    .equity-milestone-label { font-size: 0.83rem; color: var(--navy); font-weight: 600; }
+    .equity-milestone-value { font-size: 0.83rem; color: var(--text-muted); }
+    .equity-milestone.reached { background: #f0fdf4; border-color: #bbf7d0; }
+    .equity-milestone.reached .equity-milestone-label { color: #166534; }
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+      .equity-bar-label { width: 40px; font-size: 0.7rem; }
+    }
+  </style>
+<link rel="stylesheet" href="/css/analytics-consent.css" />
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-building-estate"></i> Planning Tool</div>
+    <h1>Home Equity Tracker</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 2 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>See How Your Equity Grows Over Time</h2>
+      <p class="calc-widget-sub">Enter your home details to track equity building through mortgage paydown and appreciation — and explore illustrative loan-to-value milestones.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="homeValue">Current Home Value</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="homeValue" class="with-prefix" value="450000" min="0" step="5000" />
+          </div>
+          <span class="field-hint">Current estimated market value</span>
+        </div>
+
+        <div class="field">
+          <label for="mortgageBalance">Remaining Mortgage Balance</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="mortgageBalance" class="with-prefix" value="280000" min="0" step="5000" />
+          </div>
+          <span class="field-hint">What you still owe on your mortgage</span>
+        </div>
+
+        <div class="field">
+          <label for="mortgageRate">Mortgage Interest Rate</label>
+          <div class="field-input-wrap">
+            <input type="number" id="mortgageRate" class="with-suffix" value="6.5" min="0" step="0.1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Your current mortgage rate</span>
+        </div>
+
+        <div class="field">
+          <label for="monthlyPayment">Monthly Mortgage Payment</label>
+          <div class="field-input-wrap">
+            <span class="field-prefix">$</span>
+            <input type="number" id="monthlyPayment" class="with-prefix" value="1800" min="0" step="50" />
+          </div>
+          <span class="field-hint">Principal + interest only (not taxes/insurance)</span>
+        </div>
+
+        <div class="field">
+          <label for="appreciation">Annual Appreciation Rate <i class="ti ti-info-circle" title="Home values can rise or fall"></i></label>
+          <div class="field-input-wrap">
+            <input type="number" id="appreciation" class="with-suffix" value="3" min="-100" max="100" step="0.5" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Scenario assumption; negative values model declines</span>
+        </div>
+
+        <div class="field">
+          <label for="trackYears">Track For</label>
+          <div class="field-input-wrap">
+            <input type="number" id="trackYears" class="with-suffix" value="10" min="1" max="30" step="1" />
+            <span class="field-suffix">yrs</span>
+          </div>
+          <span class="field-hint">How many years to project forward</span>
+        </div>
+      </div>
+
+      <div id="equityError" role="alert" aria-live="polite" style="display:none;margin:0 0 1rem;padding:0.85rem 1rem;border:1px solid #e7a3a3;background:#fff2f2;color:#842525;border-radius:8px;"></div>
+      <button class="calc-btn" onclick="trackEquity()">
+        <i class="ti ti-trending-up"></i> Track My Equity
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="results-summary">
+          <div class="result-box">
+            <div class="result-box-label">Equity Today</div>
+            <div class="result-box-value" id="equityNow">$0</div>
+            <div class="result-box-sub" id="ltvNow">LTV: 0%</div>
+          </div>
+          <div class="result-box gold">
+            <div class="result-box-label">Projected Equity</div>
+            <div class="result-box-value" id="equityFuture">$0</div>
+            <div class="result-box-sub" id="ltvFuture">In 10 years</div>
+          </div>
+        </div>
+
+        <p id="equityWarning" role="status" aria-live="polite" style="display:none;margin:1rem 0;padding:0.85rem 1rem;border:1px solid #e5cc86;background:#fff9e9;border-radius:8px;"></p>
+        <!-- Year-by-year bar chart -->
+        <div class="results-table-wrap">
+          <h3>Equity Build-Up — Year by Year</h3>
+          <div class="equity-bar-wrap" id="equityBars"></div>
+        </div>
+
+        <!-- HELOC milestones -->
+        <div class="results-table-wrap" style="margin-top:1.5rem;">
+          <h3>Illustrative Equity Milestones</h3>
+          <div id="milestones"></div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">Your equity position is tracked above. Green milestones show thresholds you've already crossed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>What Builds Your Home Equity?</h2>
+      <p>Home equity can change through two main factors: <strong>mortgage paydown</strong> (principal payments reduce your loan balance) and <strong>changes in home value</strong> (which can increase or decrease). Early in many amortizing mortgages, a larger share of each payment goes toward interest. The actual mix depends on the loan terms and payment amount.</p>
+
+      <h3>Why Equity Matters for a HELOC</h3>
+      <p>Your equity position directly determines how much you can borrow via a HELOC. Some lenders use combined loan-to-value limits around 80–85%, but limits and underwriting requirements vary. The higher your equity, the larger the credit line available to you. Use the <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a> to explore an illustrative credit-line estimate.</p>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>Appreciation is not guaranteed</strong>
+          <p>This tool projects equity using a consistent appreciation rate. In reality, home values fluctuate and can decline. The default 3% is an example, not a forecast. Try 0% or a negative rate to explore other scenarios.</p>
+        </div>
+      </div>
+
+      <h2>Next Steps</h2>
+      <p>Once you know your current and projected equity, estimate how much you might be able to borrow today with the <a href="/calculators/borrowing-power-calculator/">Borrowing Power Calculator</a>, or check your current LTV ratio with the <a href="/calculators/ltv-calculator/">LTV Calculator</a>.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">Home Equity FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              What appreciation rate should I use?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">There is no reliable appreciation rate for every home or location. The default 3% is illustrative, not a prediction. Try 0% and negative values to see how outcomes change.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Does renovating my home increase my HELOC borrowing power?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Possibly. A renovation may increase your home's appraised value, but the cost of the work does not necessarily equal the increase in value. Any additional HELOC borrowing capacity depends on the lender's valuation and underwriting rules.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              How often should I check my equity position?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Revisiting annually makes sense, particularly in a rising rate environment where your home's value may have changed. A professional appraisal gives the most accurate figure, though online home value tools provide a reasonable free estimate for planning purposes.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/borrowing-power-calculator/"><i class="ti ti-arrow-right"></i> Borrowing Power Calculator</a></li>
+        <li><a href="/calculators/ltv-calculator/"><i class="ti ti-arrow-right"></i> LTV Calculator</a></li>
+        <li><a href="/calculators/heloc-payment-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payment Calculator</a></li>
+        <li><a href="/calculators/heloc-payoff-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payoff Calculator</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+        <li><a href="/blog/"><i class="ti ti-arrow-right"></i> Learning Center</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+  <div class="author-bio">
+    <div class="author-avatar"><i class="ti ti-user" aria-hidden="true"></i></div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity. <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+          <li><a href="/blog/heloc-vs-home-equity-loan/">HELOC vs Home Equity Loan</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(n) {
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  function trackEquity() {
+    const ids = ['homeValue', 'mortgageBalance', 'mortgageRate', 'monthlyPayment', 'appreciation', 'trackYears'];
+    const inputs = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+    const errorEl = document.getElementById('equityError');
+    const warningEl = document.getElementById('equityWarning');
+    errorEl.style.display = 'none';
+    warningEl.style.display = 'none';
+    const values = {};
+    for (const id of ids) {
+      const raw = inputs[id].value.trim();
+      const value = Number(raw);
+      if (!raw || !Number.isFinite(value)) {
+        errorEl.textContent = 'Please enter a valid number in every field.';
+        errorEl.style.display = 'block';
+        document.getElementById('results').classList.remove('visible');
+        return;
+      }
+      values[id] = value;
+    }
+    const {homeValue, mortgageBalance, mortgageRate, monthlyPayment, appreciation, trackYears} = values;
+    if (homeValue <= 0 || mortgageBalance < 0 || mortgageRate < 0 || mortgageRate > 100 ||
+        monthlyPayment < 0 || appreciation < -100 || appreciation > 100 ||
+        !Number.isInteger(trackYears) || trackYears < 1 || trackYears > 30) {
+      errorEl.textContent = 'Use a home value above $0, nonnegative balances/payments, rates between 0–100%, appreciation between -100% and 100%, and whole projection years from 1–30.';
+      errorEl.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
+    }
+
+    const monthlyRate = mortgageRate / 1200;
+    const annualAppreciation = appreciation / 100;
+    const equityNow = homeValue - mortgageBalance;
+    const ltvNow = mortgageBalance / homeValue * 100;
+    let balance = mortgageBalance;
+    let value = homeValue;
+    let insufficientMonths = 0;
+    const yearData = [];
+
+    for (let y = 0; y <= trackYears; y++) {
+      const equity = value - balance;
+      const ltv = value > 0 ? balance / value * 100 : (balance > 0 ? Infinity : 0);
+      yearData.push({year: y, value, balance, equity, ltv});
+      if (y === trackYears) break;
+      value *= 1 + annualAppreciation;
+      for (let m = 0; m < 12; m++) {
+        if (balance <= 0) break;
+        const interest = balance * monthlyRate;
+        if (monthlyPayment + 1e-8 < interest) insufficientMonths++;
+        // Illustrative negative amortization: unpaid interest is added to balance.
+        balance = Math.max(0, balance + interest - monthlyPayment);
+      }
+    }
+
+    const futureData = yearData[trackYears];
+    if (!Number.isFinite(futureData.balance) || !Number.isFinite(futureData.equity)) {
+      errorEl.textContent = 'These inputs produce values too large to project. Please use a shorter period or more moderate assumptions.';
+      errorEl.style.display = 'block';
+      document.getElementById('results').classList.remove('visible');
+      return;
+    }
+    const warnings = [];
+    if (insufficientMonths) warnings.push(`In ${insufficientMonths} projected month(s), the payment is below the interest charged. This model adds unpaid interest to the balance (negative amortization). Your mortgage may not permit this; check your loan terms.`);
+    if (appreciation < 0) warnings.push('This scenario assumes declining home values. Equity can become negative.');
+    if (mortgageBalance > homeValue) warnings.push('Your starting mortgage balance exceeds the estimated home value (negative equity).');
+    if (warnings.length) {
+      warningEl.textContent = warnings.join(' ');
+      warningEl.style.display = 'block';
+    }
+
+    document.getElementById('equityNow').textContent = formatCurrency(equityNow);
+    document.getElementById('ltvNow').textContent = 'LTV: ' + ltvNow.toFixed(1) + '%';
+    document.getElementById('equityFuture').textContent = formatCurrency(futureData.equity);
+    document.getElementById('ltvFuture').textContent = 'In ' + trackYears + ' years';
+
+    const maxPositiveEquity = Math.max(0, ...yearData.map(d => d.equity));
+    document.getElementById('equityBars').innerHTML = yearData
+      .filter((d, i) => i % Math.max(1, Math.floor(trackYears / 10)) === 0 || i === trackYears)
+      .map(d => {
+        const pct = maxPositiveEquity > 0 ? Math.max(0, Math.min(d.equity / maxPositiveEquity * 100, 100)) : 0;
+        return `<div class="equity-bar-row">
+          <span class="equity-bar-label">Yr ${d.year}</span>
+          <div class="equity-bar-track"><div class="equity-bar-equity" style="width:${pct}%"></div></div>
+          <span class="equity-bar-value">${formatCurrency(d.equity)}</span>
+        </div>`;
+      }).join('');
+
+    const milestoneThresholds = [
+      {label: '20% equity (LTV = 80%)', ltv: 80, desc: 'Illustrative LTV benchmark, not an approval threshold'},
+      {label: '25% equity (LTV = 75%)', ltv: 75, desc: 'Illustrative LTV benchmark; lender terms vary'},
+      {label: '30% equity (LTV = 70%)', ltv: 70, desc: 'Illustrative equity position, not a rate guarantee'}
+    ];
+    document.getElementById('milestones').innerHTML = milestoneThresholds.map(m => {
+      const reached = ltvNow <= m.ltv;
+      const yearReached = yearData.find(d => d.ltv <= m.ltv);
+      const yearStr = reached ? 'Already reached ✓' : yearReached ? `Year ${yearReached.year}` : 'Beyond projection';
+      return `<div class="equity-milestone ${reached ? 'reached' : ''}">
+        <div><div class="equity-milestone-label">${m.label}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">${m.desc}</div></div>
+        <div class="equity-milestone-value">${yearStr}</div></div>`;
+    }).join('');
+
+    document.getElementById('resultExplainer').textContent =
+      `Your estimated equity is ${formatCurrency(equityNow)} today (${ltvNow.toFixed(1)}% LTV). Assuming ${appreciation}% annual home-value change, a fixed ${mortgageRate}% mortgage rate and a $${monthlyPayment.toLocaleString('en-US')} monthly principal-and-interest payment, projected equity is ${formatCurrency(futureData.equity)} in ${trackYears} years. This is an illustration, not a forecast or lending decision.`;
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }
+
+  document.addEventListener('DOMContentLoaded', trackEquity);
+</script>
+
+<!-- HE-030B.9: Analytics-only consent test; not an advertising CMP. -->
+<section id="he-consent" role="region" aria-labelledby="he-consent-title" hidden>
+<h2 id="he-consent-title">Optional website analytics</h2>
+<p>We would like to use Google Analytics to understand visits to this website. You can accept or reject. Your choice does not affect our calculators. See our <a href="/privacy-policy/">Privacy Policy</a>.</p>
+<div class="choices"><button type="button" id="he-reject">Reject analytics</button><button type="button" id="he-accept">Accept analytics</button></div>
+</section>
+<button type="button" id="he-consent-settings" hidden>Analytics choices</button>
+<script defer src="/js/analytics-consent.js"></script>
+</body>
+</html>

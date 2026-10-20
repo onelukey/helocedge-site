@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debt Consolidation Calculator — HELOC Savings Estimator | HELOCEdge.com</title>
+  <meta name="description" content="See how much you could save by consolidating high-interest debt into a HELOC. Free calculator compares your current payments against a consolidated HELOC payment." />
+  <link rel="canonical" href="https://helocedge.com/calculators/debt-consolidation-calculator/" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* page-specific styles only — global styles are in /css/style.css */
+    @media (max-width: 600px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .results-summary { grid-template-columns: 1fr; }
+      .debt-row, .debt-row-header { grid-template-columns: 1fr 1fr; }
+      .debt-row-header span:nth-child(3), .debt-row-header span:nth-child(4) { display: none; }
+    }
+  </style>
+<link rel="stylesheet" href="/css/analytics-consent.css" />
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">HELOC<span>Edge</span>.com</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/calculators/" class="active">Calculators</a></li>
+      <li><a href="/blog/">Learn</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/#quiz" class="nav-cta">Find My Calculator</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="hero-pill"><i class="ti ti-credit-card-off"></i> Compare</div>
+    <h1>Debt Consolidation Calculator</h1>
+    <div class="page-header-meta">
+      <span><i class="ti ti-clock"></i> 3 min read</span>
+      <span class="meta-divider"></span>
+      <span><i class="ti ti-user"></i> Mike Lucas</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+
+  <main>
+
+    <!-- ── CALCULATOR WIDGET ── -->
+    <div class="calc-widget">
+      <h2>Compare Monthly Payments and Total Costs</h2>
+      <p class="calc-widget-sub">Enter your existing debts to compare estimated monthly payments and long-term costs. A lower payment does not necessarily mean lower total costs.</p>
+
+      <div class="field" style="margin: 1rem 0;">
+        <label for="paymentMode">Existing debt payment comparison</label>
+        <select id="paymentMode" onchange="updatePaymentMode()" style="width:100%;padding:.8rem;border:1px solid #cbd5e1;border-radius:8px;background:white;">
+          <option value="estimated">Estimated payments — repay each debt over 5 years</option>
+          <option value="actual">My actual monthly payments — from statements</option>
+        </select>
+        <span class="field-hint">The 5-year estimate is a comparison assumption, not a typical credit-card minimum payment.</span>
+      </div>
+      <div class="debt-row-header">
+        <span>Debt Name</span>
+        <span>Balance</span>
+        <span>Rate</span>
+        <span></span>
+      </div>
+      <div id="debtRows">
+        <div class="debt-row">
+          <div class="field">
+            <input type="text" class="debt-name" value="Credit Card 1" />
+          </div>
+          <div class="field">
+            <div class="field-input-wrap">
+              <span class="field-prefix">$</span>
+              <input type="number" class="debt-balance with-prefix" value="8000" min="0" step="100" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-input-wrap">
+              <input type="number" class="debt-rate with-suffix" value="22" min="0" step="0.1" />
+              <span class="field-suffix">%</span>
+            </div>
+          </div>
+          <div class="field actual-payment-field" hidden>
+            <label>Actual monthly payment ($)</label>
+            <input type="number" class="debt-actual-payment" min="0" step="0.01" placeholder="From statement" />
+          </div>
+          <button class="remove-debt-btn" onclick="removeDebtRow(this)"><i class="ti ti-trash"></i></button>
+        </div>
+        <div class="debt-row">
+          <div class="field">
+            <input type="text" class="debt-name" value="Personal Loan" />
+          </div>
+          <div class="field">
+            <div class="field-input-wrap">
+              <span class="field-prefix">$</span>
+              <input type="number" class="debt-balance with-prefix" value="6000" min="0" step="100" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-input-wrap">
+              <input type="number" class="debt-rate with-suffix" value="14" min="0" step="0.1" />
+              <span class="field-suffix">%</span>
+            </div>
+          </div>
+          <div class="field actual-payment-field" hidden>
+            <label>Actual monthly payment ($)</label>
+            <input type="number" class="debt-actual-payment" min="0" step="0.01" placeholder="From statement" />
+          </div>
+          <button class="remove-debt-btn" onclick="removeDebtRow(this)"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      <button class="add-debt-btn" onclick="addDebtRow()"><i class="ti ti-plus"></i> Add Another Debt</button>
+
+      <div class="field-grid" style="margin-top: 1rem;">
+        <div class="field">
+          <label for="helocRate">HELOC Rate</label>
+          <div class="field-input-wrap">
+            <input type="number" id="helocRate" class="with-suffix" value="8.5" min="0" step="0.1" />
+            <span class="field-suffix">%</span>
+          </div>
+          <span class="field-hint">Illustrative annual rate — enter your own scenario</span>
+        </div>
+        <div class="field">
+          <label for="repayTerm">Repayment Term</label>
+          <div class="field-input-wrap">
+            <input type="number" id="repayTerm" class="with-suffix" value="10" min="1" max="30" step="1" />
+            <span class="field-suffix">yrs</span>
+          </div>
+          <span class="field-hint">How long to repay the consolidated HELOC</span>
+        </div>
+      </div>
+
+      <div class="field-grid" style="margin-top: 1rem;">
+        <div class="field">
+          <label for="helocFees">One-time HELOC fees ($)</label>
+          <div class="field-input-wrap"><span class="field-prefix">$</span><input type="number" id="helocFees" class="with-prefix" value="0" min="0" step="1" /></div>
+          <span class="field-hint">Fees paid separately; not added to the loan balance</span>
+        </div>
+      </div>
+      <div id="calcError" role="alert" aria-live="polite" style="display:none;color:#9b1c1c;background:#fff1f1;padding:12px;border-radius:8px;margin:12px 0;"></div>
+      <div class="rate-explainer">
+        <i class="ti ti-info-circle"></i>
+        <span>Estimated mode assumes each existing debt is paid off in 5 years at a constant APR; this is <strong>not</strong> a credit-card minimum-payment estimate. Actual-payment mode compares monthly cash flow only because statement payments alone cannot establish future interest or payoff time. The HELOC model assumes a constant rate, immediate full amortization and no new borrowing; real HELOCs may have variable rates and interest-only draw periods.</span>
+      </div>
+
+      <button class="calc-btn" onclick="calculateConsolidation()">
+        <i class="ti ti-calculator"></i> Calculate My Savings
+      </button>
+
+      <!-- ── RESULTS ── -->
+      <div class="results" id="results">
+        <div class="results-summary">
+          <div class="result-box">
+            <div class="result-box-label">Current Combined Payment</div>
+            <div class="result-box-value" id="currentPayment">$0</div>
+            <div class="result-box-sub" id="currentPaymentNote">Estimated 5-year payments</div>
+          </div>
+          <div class="result-box gold">
+            <div class="result-box-label">New HELOC Payment</div>
+            <div class="result-box-value" id="newPayment">$0</div>
+            <div class="result-box-sub">One consolidated payment</div>
+          </div>
+        </div>
+
+        <div class="results-table-wrap">
+          <h3>Payment and Cost Comparison</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Current Debts</th>
+                  <th>Consolidated HELOC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Total Balance</td>
+                  <td id="tblTotalBalance">$0</td>
+                  <td id="tblHelocBalance">$0</td>
+                </tr>
+                <tr>
+                  <td>Monthly Payment</td>
+                  <td id="tblCurrentPayment">$0</td>
+                  <td id="tblNewPayment">$0</td>
+                </tr>
+                <tr><td>Estimated total interest</td><td id="tblCurrentInterest">$0</td><td id="tblHelocInterest">$0</td></tr>
+                <tr><td>HELOC one-time fees</td><td>—</td><td id="tblFees">$0</td></tr>
+                <tr><td>Total repayment incl. fees</td><td id="tblCurrentTotal">$0</td><td id="tblHelocTotal">$0</td></tr>
+                <tr style="font-weight:600;">
+                  <td>Monthly Savings</td>
+                  <td colspan="2" id="tblMonthlySavings">$0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p id="costComparison" aria-live="polite" style="margin-top:1rem;font-weight:600;"></p>
+        <div class="callout callout-tip" style="margin-top:1.5rem;">
+          <i class="ti ti-bulb"></i>
+          <div class="callout-content">
+            <strong>What this means</strong>
+            <p id="resultExplainer">Consolidating your debts into a HELOC could lower your blended interest rate and simplify multiple payments into one.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ARTICLE CONTENT ── -->
+    <div class="article-content">
+      <h2>How Debt Consolidation With a HELOC Works</h2>
+      <p>If you're carrying multiple high-interest debts — credit cards, personal loans, or store financing — a HELOC may allow you to pay them off and replace multiple payments with one. Whether this saves money depends on your rates, fees, repayment period and future rate changes. Using home equity also turns unsecured debt into debt secured by your home.</p>
+
+      <h3>Why the Savings Can Be Significant</h3>
+      <p>Credit card minimum payments are structured to keep you paying interest for years. By consolidating into a HELOC at a much lower rate, more of each payment goes toward your actual balance rather than interest — which is why total savings can be substantial even if your overall payment doesn't drop dramatically.</p>
+
+      <div class="callout callout-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div class="callout-content">
+          <strong>The biggest risk</strong>
+          <p>Consolidating unsecured debt (credit cards) into a HELOC converts it into secured debt against your home. If you can't keep up with payments, you risk foreclosure, not just a damaged credit score. Only consolidate if you're confident in your ability to manage the new payment.</p>
+        </div>
+      </div>
+
+      <h3>A Word of Caution on Spending Habits</h3>
+      <p>Consolidation only works if you stop accumulating new high-interest debt. Many homeowners consolidate credit cards, pay them down, then run the balances back up — ending up with both the HELOC payment and new credit card debt. Consider closing or freezing paid-off cards if discipline is a concern.</p>
+
+      <h2>Next Steps</h2>
+      <p>Once you know your potential savings, check what your actual monthly HELOC payment would look like in detail using our <a href="/calculators/heloc-payment-calculator/">HELOC Payment Calculator</a>, or compare against a fixed-rate option with <a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs. Home Equity Loan</a>.</p>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" style="padding: 2.5rem 0 0; background: transparent;">
+      <div class="faq-inner" style="max-width: none; padding: 0;">
+        <p class="section-label">Common Questions</p>
+        <h2 style="font-size:1.3rem;">Debt Consolidation FAQs</h2>
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Is it safe to consolidate credit card debt into a HELOC?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">It can be a smart move if you have a stable income and won't run the credit cards back up, since you'll typically pay a much lower rate. However, you're converting unsecured debt into debt secured by your home, so missing payments carries more serious consequences than with credit cards.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Will consolidating debt hurt my credit score?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Initially, opening a new HELOC may cause a small, temporary dip from the credit inquiry. However, paying off revolving credit card balances typically improves your credit utilization ratio, which often helps your score recover and improve over time.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              Can I include student loans or auto loans in consolidation?
+              <i class="ti ti-plus"></i>
+            </button>
+            <div class="faq-a">Yes, technically you can use HELOC funds to pay off almost any debt. However, federal student loans often carry borrower protections (like income-driven repayment or forgiveness programs) that you would lose by consolidating into a HELOC — review this carefully before proceeding.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ── -->
+  <aside>
+    <div class="sidebar-card">
+      <h3>Related Calculators</h3>
+      <ul>
+        <li><a href="/calculators/heloc-payment-calculator/"><i class="ti ti-arrow-right"></i> HELOC Payment Calculator</a></li>
+        <li><a href="/calculators/heloc-vs-home-equity-loan/"><i class="ti ti-arrow-right"></i> HELOC vs Home Equity Loan</a></li>
+        <li><a href="/calculators/borrowing-power-calculator/"><i class="ti ti-arrow-right"></i> Borrowing Power Calculator</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/calculators/"><i class="ti ti-arrow-right"></i> All Calculators</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── AUTHOR BIO + DISCLAIMER ── -->
+<div class="bottom-wrap">
+  <div class="editorial-disclaimer">
+    <strong>Editorial disclaimer:</strong> The calculators and content on HELOCEdge.com are for general educational purposes only and do not constitute financial or lending advice. Always consult a licensed mortgage or financial professional before making borrowing decisions. Content researched and edited by Mike Lucas, with the assistance of AI writing tools.
+  </div>
+
+  <div class="author-bio">
+    <div class="author-avatar">
+      <i class="ti ti-user" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p class="author-label">About the author</p>
+      <p class="author-name">Mike Lucas — Founder, HELOCEdge.com</p>
+      <p class="author-desc">Mike is a UK-based personal finance researcher who built HELOCEdge.com after studying the US home equity market and finding that millions of American homeowners struggle to make sense of their borrowing options. He monitors Federal Reserve policy, tracks HELOC rate movements, and writes all content on this site with one goal: helping US homeowners make confident, informed decisions about their home equity.
+        <a href="/about/">Read Mike's full story →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SITE DISCLAIMER BAR ── -->
+<div class="disclaimer-bar">
+  <p><strong>Editorial disclaimer:</strong> HELOCEdge.com is an independent educational publisher. We have no lender relationships and receive no commission from any financial product. Content on this site is researched and edited by Mike Lucas, with the assistance of AI writing tools. Nothing on this site constitutes financial advice. Always consult a licensed mortgage professional before making borrowing decisions.</p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">HELOC<span>Edge</span>.com</div>
+        <p class="footer-brand-desc">Independent HELOC education and free calculators for US homeowners. No lender relationships. No sales pitch. Just the numbers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="/calculators/heloc-payment-calculator/">Payment Calculator</a></li>
+          <li><a href="/calculators/borrowing-power-calculator/">Borrowing Power</a></li>
+          <li><a href="/calculators/heloc-vs-home-equity-loan/">HELOC vs HEL</a></li>
+          <li><a href="/calculators/debt-consolidation-calculator/">Debt Consolidation</a></li>
+          <li><a href="/calculators/">All Calculators →</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">All Articles</a></li>
+          <li><a href="/blog/how-much-can-i-borrow-with-a-heloc/">How Much Can I Borrow?</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/disclaimer/">Disclaimer</a></li>
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 HELOCEdge.com · All rights reserved · An independent Mike Lucas publication</p>
+      <div class="footer-legal">
+        <a href="/disclaimer/">Disclaimer</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms-of-use/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── JS: NAV TOGGLE ── -->
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    const links = document.getElementById('navLinks');
+    links.classList.toggle('open');
+    this.querySelector('i').className = links.classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+  });
+</script>
+
+<!-- ── JS: FAQ ── -->
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+  }
+</script>
+
+<!-- ── JS: DEBT ROWS ── -->
+<script>
+  function addDebtRow() {
+    const container = document.getElementById('debtRows');
+    const row = document.createElement('div');
+    row.className = 'debt-row';
+    row.innerHTML = `
+      <div class="field">
+        <input type="text" class="debt-name" value="New Debt" />
+      </div>
+      <div class="field">
+        <div class="field-input-wrap">
+          <span class="field-prefix">$</span>
+          <input type="number" class="debt-balance with-prefix" value="2000" min="0" step="100" />
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-input-wrap">
+          <input type="number" class="debt-rate with-suffix" value="18" min="0" step="0.1" />
+          <span class="field-suffix">%</span>
+        </div>
+      </div>
+          <div class="field actual-payment-field" hidden>
+            <label>Actual monthly payment ($)</label>
+            <input type="number" class="debt-actual-payment" min="0" step="0.01" placeholder="From statement" />
+          </div>
+      <button class="remove-debt-btn" onclick="removeDebtRow(this)"><i class="ti ti-trash"></i></button>
+    `;
+    container.appendChild(row);
+    updatePaymentMode();
+  }
+
+  function removeDebtRow(btn) {
+    const container = document.getElementById('debtRows');
+    if (container.children.length > 1) {
+      btn.closest('.debt-row').remove();
+    }
+  }
+</script>
+
+<!-- ── JS: CALCULATOR ── -->
+<script>
+  function formatCurrency(num) {
+    return (num < 0 ? '-$' : '$') + Math.abs(num).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
+  function amortizedPayment(principal, annualRate, years) {
+    const n = years * 12;
+    if (principal === 0) return 0;
+    const r = annualRate / 1200;
+    if (r === 0) return principal / n;
+    return principal * r / (1 - Math.pow(1 + r, -n));
+  }
+  function updatePaymentMode() {
+    const actual = document.getElementById('paymentMode').value === 'actual';
+    document.querySelectorAll('.actual-payment-field').forEach(el => {
+      el.hidden = !actual;
+      el.style.display = actual ? 'block' : 'none';
+    });
+  }
+  function calculateConsolidation() {
+    const error = document.getElementById('calcError');
+    error.style.display = 'none';
+    const fail = message => { error.textContent = message; error.style.display = 'block'; document.getElementById('results').classList.remove('visible'); return false; };
+    const validNumber = (el, label, max) => {
+      if (!el || el.value.trim() === '' || !Number.isFinite(el.valueAsNumber) || el.valueAsNumber < 0 || el.valueAsNumber > max) throw new Error(label + ' must be between 0 and ' + max.toLocaleString() + '.');
+      return el.valueAsNumber;
+    };
+    try {
+      const actualMode = document.getElementById('paymentMode').value === 'actual';
+      let balance = 0, currentPayment = 0, currentInterest = 0;
+      const rows = [...document.querySelectorAll('#debtRows .debt-row')];
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i], label = 'Debt ' + (i + 1);
+        const amount = validNumber(row.querySelector('.debt-balance'), label + ' balance', 100000000);
+        const rate = validNumber(row.querySelector('.debt-rate'), label + ' APR', 100);
+        balance += amount;
+        if (actualMode) {
+          currentPayment += validNumber(row.querySelector('.debt-actual-payment'), label + ' actual payment', 10000000);
+        } else {
+          const payment = amortizedPayment(amount, rate, 5);
+          currentPayment += payment;
+          currentInterest += payment * 60 - amount;
+        }
+      }
+      if (balance <= 0) return fail('Enter at least one debt with a positive balance.');
+      const rate = validNumber(document.getElementById('helocRate'), 'HELOC APR', 100);
+      const years = validNumber(document.getElementById('repayTerm'), 'HELOC repayment term', 30);
+      if (years < 1 || !Number.isInteger(years)) return fail('HELOC repayment term must be a whole number from 1 to 30 years.');
+      const fees = validNumber(document.getElementById('helocFees'), 'HELOC fees', 10000000);
+      const payment = amortizedPayment(balance, rate, years);
+      const helocInterest = Math.max(0, payment * years * 12 - balance);
+      const helocTotal = balance + helocInterest + fees;
+      const difference = currentPayment - payment;
+      const set = (id, value) => document.getElementById(id).textContent = value;
+      set('currentPayment', formatCurrency(currentPayment));
+      set('newPayment', formatCurrency(payment));
+      set('currentPaymentNote', actualMode ? 'From your stated monthly payments' : 'Estimated 5-year payoff per debt');
+      set('tblTotalBalance', formatCurrency(balance));
+      set('tblHelocBalance', formatCurrency(balance));
+      set('tblCurrentPayment', formatCurrency(currentPayment));
+      set('tblNewPayment', formatCurrency(payment));
+      set('tblMonthlySavings', difference >= 0 ? formatCurrency(difference) + ' less per month' : formatCurrency(-difference) + ' more per month');
+      set('tblCurrentInterest', actualMode ? 'Not estimable from payments alone' : formatCurrency(currentInterest));
+      set('tblHelocInterest', formatCurrency(helocInterest));
+      set('tblFees', formatCurrency(fees));
+      set('tblCurrentTotal', actualMode ? 'Not estimable' : formatCurrency(balance + currentInterest));
+      set('tblHelocTotal', formatCurrency(helocTotal));
+      if (actualMode) {
+        set('costComparison', 'Total cost comparison unavailable in actual-payment mode: payment amounts alone do not tell us when existing debts will be paid off.');
+      } else {
+        const costDifference = helocTotal - (balance + currentInterest);
+        set('costComparison', 'Estimated HELOC total cost is ' + formatCurrency(Math.abs(costDifference)) + (costDifference > 0.005 ? ' higher' : costDifference < -0.005 ? ' lower' : ' approximately equal') + ' than the modelled 5-year existing-debt payoff, including HELOC fees.');
+      }
+      set('resultExplainer', 'Your modelled HELOC payment is ' + formatCurrency(payment) + ' per month over ' + years + ' years at a constant ' + rate + '% APR, with ' + formatCurrency(fees) + ' in separately paid fees. ' + (difference >= 0 ? 'That is ' + formatCurrency(difference) + ' less' : 'That is ' + formatCurrency(-difference) + ' more') + ' per month than ' + (actualMode ? 'the actual payments you entered.' : 'estimated 5-year existing-debt payments.') + ' Lower monthly payments do not necessarily mean lower total costs. A HELOC uses your home as collateral; failure to repay could put it at risk.');
+      document.getElementById('results').classList.add('visible');
+    } catch (e) { return fail(e.message); }
+  }
+  document.addEventListener('DOMContentLoaded', () => { updatePaymentMode(); calculateConsolidation(); });
+</script>
+<!-- HE-030B.9: Analytics-only consent test; not an advertising CMP. -->
+<section id="he-consent" role="region" aria-labelledby="he-consent-title" hidden>
+<h2 id="he-consent-title">Optional website analytics</h2>
+<p>We would like to use Google Analytics to understand visits to this website. You can accept or reject. Your choice does not affect our calculators. See our <a href="/privacy-policy/">Privacy Policy</a>.</p>
+<div class="choices"><button type="button" id="he-reject">Reject analytics</button><button type="button" id="he-accept">Accept analytics</button></div>
+</section>
+<button type="button" id="he-consent-settings" hidden>Analytics choices</button>
+<script defer src="/js/analytics-consent.js"></script>
+</body>
+</html>
