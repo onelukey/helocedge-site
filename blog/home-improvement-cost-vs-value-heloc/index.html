@@ -10,22 +10,13 @@
 <link rel="canonical" href="https://helocedge.com/blog/home-improvement-cost-vs-value-heloc/" />
 <!-- External CSS -->
 <link rel="stylesheet" href="/css/style.css" />
-<!-- GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9RLKEB7GMX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-9RLKEB7GMX');
-</script>
-<!-- AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3723787015797542" crossorigin="anonymous"></script>
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <!-- Tabler Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<link rel="stylesheet" href="/css/analytics-consent.css" />
 </head>
 <body>
 
@@ -326,5 +317,13 @@
   }
 </script>
 
+<!-- HE-030B.9: Analytics-only consent test; not an advertising CMP. -->
+<section id="he-consent" role="region" aria-labelledby="he-consent-title" hidden>
+<h2 id="he-consent-title">Optional website analytics</h2>
+<p>We would like to use Google Analytics to understand visits to this website. You can accept or reject. Your choice does not affect our calculators. See our <a href="/privacy-policy/">Privacy Policy</a>.</p>
+<div class="choices"><button type="button" id="he-reject">Reject analytics</button><button type="button" id="he-accept">Accept analytics</button></div>
+</section>
+<button type="button" id="he-consent-settings" hidden>Analytics choices</button>
+<script defer src="/js/analytics-consent.js"></script>
 </body>
 </html>
